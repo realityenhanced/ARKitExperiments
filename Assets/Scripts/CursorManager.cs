@@ -27,24 +27,44 @@ public class CursorManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		UpdateTransformUsingWorldHitPoint (m_cursorTransform);
+		UpdateTransformUsingWorldHitPoint(m_cursorTransform);
 	}
 
 	// Helpers
 	bool UpdateTransformUsingWorldHitPoint(Transform transformToUpdate) {
+
+		bool wasTransformUpdated = false;
+
 		List<ARHitTestResult> hitResults = 
 			UnityARSessionNativeInterface.GetARSessionNativeInterface().HitTest(m_hitPointToUse, m_resultTypeToUse);
+
 		if (hitResults.Count > 0) {
-			ARHitTestResult hitResult = hitResults[0];
-			transformToUpdate.position = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
-			transformToUpdate.rotation = UnityARMatrixOps.GetRotation(hitResult.worldTransform);
+			ARHitTestResult hitResult = GetFirstValidHit(hitResults);
+			if (hitResult.isValid) {
+				transformToUpdate.position = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
+				transformToUpdate.rotation = UnityARMatrixOps.GetRotation(hitResult.worldTransform);
 
-			Debug.Log (string.Format ("x:{0:0.######} y:{1:0.######} z:{2:0.######}", 
-				transformToUpdate.position.x, transformToUpdate.position.y, transformToUpdate.position.z));
-
-			return true;
+				Debug.Log (string.Format ("Pos x:{0:0.######} y:{1:0.######} z:{2:0.######}", 
+					transformToUpdate.position.x, transformToUpdate.position.y, transformToUpdate.position.z));
+				Debug.Log (string.Format ("Rot x:{0:0.######} y:{1:0.######} z:{2:0.######}", 
+					transformToUpdate.rotation.x, transformToUpdate.rotation.y, transformToUpdate.rotation.z));
+							
+				wasTransformUpdated = true;
+			}
 		}
 
-		return false;	
+		return wasTransformUpdated;	
+	}
+
+	static ARHitTestResult GetFirstValidHit(List<ARHitTestResult> hitResults)
+	{
+		ARHitTestResult hitResult = hitResults[0]; // Return the first hit, if no valid hits were found.
+		foreach (var h in hitResults) {
+			if (h.isValid) {
+				hitResult = h;
+				break;
+			}
+		}
+		return hitResult;
 	}
 }
