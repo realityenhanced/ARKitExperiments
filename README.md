@@ -7,3 +7,6 @@ https://forum.unity3d.com/threads/arkit-support-for-ios-via-unity-arkit-plugin.4
 
 ## How to build Unity projects on ios?
 https://unity3d.com/learn/tutorials/topics/mobile-touch/building-your-unity-game-ios-device-testing
+
+## Understanding AR in iOS
+https://developer.apple.com/documentation/arkit/understanding_augmented_reality
