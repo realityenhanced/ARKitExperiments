@@ -1,0 +1,231 @@
+fileFormatVersion: 2
+guid: abfe49acffaa34165b7e8f3fa681f5a3
+timeCreated: 1499310227
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Backbone
+    100004: Backbone.001
+    100006: Backbone.002
+    100008: Beak
+    100010: Beak_end
+    100012: Beak_L
+    100014: Beak_L_end
+    100016: Beak_R
+    100018: Beak_R_end
+    100020: Comb
+    100022: Comb_end
+    100024: Finger_L
+    100026: Finger_L.001
+    100028: Finger_L.002
+    100030: Finger_L.004
+    100032: Finger_L.005
+    100034: Finger_L.005_end
+    100036: Finger_L.006
+    100038: Finger_L.007
+    100040: Finger_L.007_end
+    100042: Finger_L.008
+    100044: Finger_L.009
+    100046: Finger_L.009_end
+    100048: Finger_L.010
+    100050: Finger_L.010_end
+    100052: Finger_L.011
+    100054: Finger_L.012
+    100056: Finger_L.012_end
+    100058: Finger_R
+    100060: Finger_R.001
+    100062: Finger_R.002
+    100064: Finger_R.004
+    100066: Finger_R.005
+    100068: Finger_R.005_end
+    100070: Finger_R.006
+    100072: Finger_R.007
+    100074: Finger_R.007_end
+    100076: Finger_R.008
+    100078: Finger_R.009
+    100080: Finger_R.009_end
+    100082: Finger_R.010
+    100084: Finger_R.010_end
+    100086: Finger_R.011
+    100088: Finger_R.012
+    100090: Finger_R.012_end
+    100092: Hip
+    100094: Hip.001
+    100096: Hip.001_end
+    100098: IK-Boot_L
+    100100: IK-Boot_L_end
+    100102: IK-Boot_R
+    100104: IK-Boot_R_end
+    100106: IK-Leg_L
+    100108: IK-Leg_L_end
+    100110: IK-Leg_R
+    100112: IK-Leg_R_end
+    100114: IK_Head
+    100116: IK_Head_end
+    100118: Leg_L
+    100120: Leg_L.001
+    100122: Leg_L.002
+    100124: Leg_R
+    100126: Leg_R.001
+    100128: Leg_R.002
+    100130: Main
+    100132: Rooster
+    100134: //RootNode
+    100136: Skull
+    400000: Armature
+    400002: Backbone
+    400004: Backbone.001
+    400006: Backbone.002
+    400008: Beak
+    400010: Beak_end
+    400012: Beak_L
+    400014: Beak_L_end
+    400016: Beak_R
+    400018: Beak_R_end
+    400020: Comb
+    400022: Comb_end
+    400024: Finger_L
+    400026: Finger_L.001
+    400028: Finger_L.002
+    400030: Finger_L.004
+    400032: Finger_L.005
+    400034: Finger_L.005_end
+    400036: Finger_L.006
+    400038: Finger_L.007
+    400040: Finger_L.007_end
+    400042: Finger_L.008
+    400044: Finger_L.009
+    400046: Finger_L.009_end
+    400048: Finger_L.010
+    400050: Finger_L.010_end
+    400052: Finger_L.011
+    400054: Finger_L.012
+    400056: Finger_L.012_end
+    400058: Finger_R
+    400060: Finger_R.001
+    400062: Finger_R.002
+    400064: Finger_R.004
+    400066: Finger_R.005
+    400068: Finger_R.005_end
+    400070: Finger_R.006
+    400072: Finger_R.007
+    400074: Finger_R.007_end
+    400076: Finger_R.008
+    400078: Finger_R.009
+    400080: Finger_R.009_end
+    400082: Finger_R.010
+    400084: Finger_R.010_end
+    400086: Finger_R.011
+    400088: Finger_R.012
+    400090: Finger_R.012_end
+    400092: Hip
+    400094: Hip.001
+    400096: Hip.001_end
+    400098: IK-Boot_L
+    400100: IK-Boot_L_end
+    400102: IK-Boot_R
+    400104: IK-Boot_R_end
+    400106: IK-Leg_L
+    400108: IK-Leg_L_end
+    400110: IK-Leg_R
+    400112: IK-Leg_R_end
+    400114: IK_Head
+    400116: IK_Head_end
+    400118: Leg_L
+    400120: Leg_L.001
+    400122: Leg_L.002
+    400124: Leg_R
+    400126: Leg_R.001
+    400128: Leg_R.002
+    400130: Main
+    400132: Rooster
+    400134: //RootNode
+    400136: Skull
+    4300000: Rooster
+    7400000: Armature|Dying
+    7400002: Armature|Idle
+    7400004: Armature|Idle1
+    7400006: Armature|Idle2
+    7400008: Armature|Pecking.001
+    7400010: Armature|Pecking.002
+    7400012: Armature|Pecking.003
+    7400014: Armature|Pecking.Begin
+    7400016: Armature|Pecking.End
+    7400018: Armature|Screaming
+    7400020: Armature|Standing
+    7400022: Armature|Walking
+    7400024: Rooster|Walking
+    9500000: //RootNode
+    13700000: Rooster
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
