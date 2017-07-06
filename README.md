@@ -12,4 +12,4 @@ https://unity3d.com/learn/tutorials/topics/mobile-touch/building-your-unity-game
 https://developer.apple.com/documentation/arkit/understanding_augmented_reality
 
 ## Credits
-Rooster model from https://www.blendswap.com/blends/view/80230 released under CC-0 by CDmir230 [https://www.blendswap.com/user/CDmir230]
+Rooster model from https://www.blendswap.com/blends/view/80230 released under CC-0 by [CDmir230](https://www.blendswap.com/user/CDmir230)
