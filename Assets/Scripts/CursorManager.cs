@@ -30,6 +30,16 @@ public class CursorManager : MonoBehaviour {
 		UpdateTransformUsingWorldHitPoint(m_cursorTransform);
 	}
 
+	public Vector3 GetCurrentCursorPosition()
+	{
+		return m_cursorTransform.position;
+	}
+
+	public Quaternion GetCurrentCursorRotation()
+	{
+		return m_cursorTransform.rotation;
+	}
+
 	// Helpers
 	bool UpdateTransformUsingWorldHitPoint(Transform transformToUpdate) {
 
