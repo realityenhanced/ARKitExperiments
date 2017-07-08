@@ -1,6 +1,8 @@
 # ARKitExperiments
 Quick and dirty experiments with ARKit
 
+Shadow Experiment Video @ https://youtu.be/nxTQbGyFHkc
+
 # Helpful Resources
 ## How to set up Unity for ARKit?
 https://forum.unity3d.com/threads/arkit-support-for-ios-via-unity-arkit-plugin.474385/
