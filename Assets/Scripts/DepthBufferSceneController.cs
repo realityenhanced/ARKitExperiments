@@ -7,6 +7,7 @@ public class DepthBufferSceneController : SceneController {
     // Script inputs
     public CursorManager m_cursorManager;
     public GameObject m_actorPrefab;
+	public Camera m_cameraToLookAt;
 
     // Privates
     Transform m_actorTransform;
@@ -27,6 +28,9 @@ public class DepthBufferSceneController : SceneController {
                 m_actorTransform.position = pos;
                 m_actorTransform.rotation = rot;
             }
+
+			// Face the camera
+			m_actorTransform.LookAt(m_cameraToLookAt.transform);
         }
     }
 }
