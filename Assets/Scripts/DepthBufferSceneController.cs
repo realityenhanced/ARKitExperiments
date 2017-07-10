@@ -1,23 +1,32 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.XR.iOS;
 
-public class DepthBufferSceneController : SceneController {
+public class DepthBufferSceneController : MonoBehaviour {
 
     // Constants
-    const int BytesPerDepthPixel = 2;
+	const TextureFormat DepthBufferFormat = TextureFormat.R8;
 
     // Script inputs
     public CursorManager m_cursorManager;
     public GameObject m_actorPrefab;
 	public Camera m_cameraToLookAt;
-    public int m_depthBufferWidth = 640;
-    public int m_depthBufferHeight = 360;
+    public int m_depthBufferWidth = 75;
+    public int m_depthBufferHeight = 75;
+	public float m_depthBufferUpdatesPerSecond = 1/5.0f;
 
     // Privates
     Transform m_actorTransform;
     byte[] m_depthBuffer;
     Texture2D m_depthBufferTexture;
+	float m_secondsPerUpdate;
+
+	void Start() {
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;	
+		m_secondsPerUpdate = 1.0f / m_depthBufferUpdatesPerSecond;
+	}
 
     void Update () {
         if (Utils.WasTouchDetected())
@@ -29,16 +38,14 @@ public class DepthBufferSceneController : SceneController {
             if (m_actorTransform == null)
             {
                 m_actorTransform = Utils.SpawnGameObjectAt(m_actorPrefab, pos, rot).transform;
-				m_depthBufferTexture = new Texture2D(m_depthBufferWidth, m_depthBufferHeight, TextureFormat.R16, false);
+				m_depthBufferTexture = new Texture2D(m_depthBufferWidth, m_depthBufferHeight, DepthBufferFormat, false);
 
 				var renderer = m_actorTransform.GetComponentsInChildren<MeshRenderer>()[0];
 				renderer.material.mainTexture = m_depthBufferTexture;
 
-                m_depthBuffer = new byte[m_depthBufferWidth * m_depthBufferHeight * BytesPerDepthPixel];
+                m_depthBuffer = new byte[m_depthBufferWidth * m_depthBufferHeight];
 
-                // TMP: Start
-				StartCoroutine(TestSwitchingColors());
-                // TMP: Ends
+				StartCoroutine(UpdateDepthBufferCoroutine());
             }
             else
             {
@@ -52,47 +59,41 @@ public class DepthBufferSceneController : SceneController {
     }
 
     // Helpers
-    private void UpdateDepthBuffer()
+    private void UpdateDepthBufferTexture()
 	{
-        m_depthBufferTexture.LoadRawTextureData(m_depthBuffer);
-		m_depthBufferTexture.Apply();
+		ARPoint point = new ARPoint {
+			x = 0.0f,
+			y = 0.0f
+		};
+
+		// TMP:Start
+		float xdelta = 1.0f / m_depthBufferWidth;
+		float ydelta = 1.0f / m_depthBufferHeight;
+		var arSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
+		var offset = 0;
+		for (int y = 0; y < m_depthBufferHeight; ++y) {
+			for (int x = 0; x < m_depthBufferWidth; ++x) {
+				List<ARHitTestResult> hitResults = arSession.HitTest(point, ARHitTestResultType.ARHitTestResultTypeFeaturePoint);
+				if (hitResults.Count > 0) {
+						m_depthBuffer[offset++] = (byte)(hitResults[0].distance * 255);
+				}
+				point.x = point.x + xdelta;
+			}
+			point.y = point.y + ydelta;
+			point.x = 0.0f;
+		}
+		// TMP: Ends
+
+		m_depthBufferTexture.LoadRawTextureData(m_depthBuffer);
+		m_depthBufferTexture.Apply ();
     }
     
-	// TMP: Start
-    private IEnumerator TestSwitchingColors()
+    private IEnumerator UpdateDepthBufferCoroutine()
     {
-        bool isWhite = false;
         while (true)
         {
-            if (isWhite)
-            {
-                SetDepthBufferColor(0.0f);
-            }
-            else
-            {
-				SetDepthBufferColor(1.0f);
-            }
-            isWhite = !isWhite;
-
-			UpdateDepthBuffer();
-
-            yield return new WaitForSeconds(1.0f);
+			UpdateDepthBufferTexture();
+            yield return new WaitForSeconds(m_secondsPerUpdate);
         }
     }
-
-    private void SetDepthBufferColor(float val)
-	{        
-        for (var i = 0; i < m_depthBuffer.GetLength(0) / BytesPerDepthPixel; ++i) {
-			float next = val;
-			if (val == 1.0f) {
-				next = UnityEngine.Random.Range (0.0f, 1.0f);
-			}
-
-			System.UInt16 uint16Val = (System.UInt16)(next * System.UInt16.MaxValue);
-			byte[] vals = BitConverter.GetBytes(uint16Val);
-            m_depthBuffer.SetValue(vals[0], i*BytesPerDepthPixel);
-            m_depthBuffer.SetValue(vals[1], (i*BytesPerDepthPixel)+1);
-        }
-    }
-	// TMP: Ends
 }
