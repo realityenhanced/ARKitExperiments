@@ -74,7 +74,10 @@ public class DepthBufferSceneController : MonoBehaviour {
 			for (int x = 0; x < m_depthBufferWidth; ++x) {
 				List<ARHitTestResult> hitResults = arSession.HitTest(point, ARHitTestResultType.ARHitTestResultTypeFeaturePoint);
 				if (hitResults.Count > 0) {
-					m_depthBuffer[offset] = (byte)(hitResults [0].distance * 255);
+                    // For now use only values between 0 and 1.
+                    var d = (hitResults[0].distance < 0) ? 0 : hitResults[0].distance;
+                    d = (d > 1) ? 1 : d;
+                    m_depthBuffer[offset] = (byte)(d * 255);
 				} else {
 					m_depthBuffer[offset] = 0;
 				}
