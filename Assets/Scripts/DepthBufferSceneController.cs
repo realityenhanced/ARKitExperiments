@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.XR.iOS;
+using UnityEngine.Rendering;
 
+// An unsuccessful attempt at creating a depth buffer from HitTests.
 public class DepthBufferSceneController : MonoBehaviour {
 
     // Constants
@@ -11,62 +13,59 @@ public class DepthBufferSceneController : MonoBehaviour {
 
     // Script inputs
     public CursorManager m_cursorManager;
-    public GameObject m_actorPrefab;
-	public Camera m_cameraToLookAt;
-    public int m_depthBufferWidth = 75;
-    public int m_depthBufferHeight = 75;
+    public Camera m_camera;
+    public int m_depthBufferWidth = 50;
+    public int m_depthBufferHeight = 100;
 	public float m_depthBufferUpdatesPerSecond = 1/5.0f;
+	public Material m_depthMaterial;
 
     // Privates
-    Transform m_actorTransform;
     byte[] m_depthBuffer;
     Texture2D m_depthBufferTexture;
 	float m_secondsPerUpdate;
+	CommandBuffer m_bltCommandBuffer;
+	bool m_isInitialized = false;
 
 	void Start() {
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;	
 		m_secondsPerUpdate = 1.0f / m_depthBufferUpdatesPerSecond;
 	}
 
+	void OnDestroy()
+	{
+		m_camera.RemoveCommandBuffer(CameraEvent.AfterForwardOpaque, m_bltCommandBuffer);
+	}
+
     void Update () {
         if (Utils.WasTouchDetected())
         {
-            // Place the actor & it's shadow plane at the last detected cursor postion.
-            var pos = m_cursorManager.GetCurrentCursorPosition();
-            var rot = m_cursorManager.GetCurrentCursorRotation();
-
-            if (m_actorTransform == null)
+            if (!m_isInitialized)
             {
-                m_actorTransform = Utils.SpawnGameObjectAt(m_actorPrefab, pos, rot).transform;
-				m_depthBufferTexture = new Texture2D(m_depthBufferWidth, m_depthBufferHeight, DepthBufferFormat, false);
+         		m_depthBufferTexture = new Texture2D(m_depthBufferWidth, m_depthBufferHeight, DepthBufferFormat, false);
+				m_depthBufferTexture.filterMode = FilterMode.Bilinear;
+				m_depthBufferTexture.wrapMode = TextureWrapMode.Repeat;
 
-				var renderer = m_actorTransform.GetComponentsInChildren<MeshRenderer>()[0];
-				renderer.material.mainTexture = m_depthBufferTexture;
+				m_depthMaterial.SetTexture("_texture", m_depthBufferTexture);
+				m_bltCommandBuffer = new CommandBuffer(); 
+				m_bltCommandBuffer.Blit(null, BuiltinRenderTextureType.CurrentActive, m_depthMaterial);
+				m_camera.AddCommandBuffer(CameraEvent.AfterForwardOpaque, m_bltCommandBuffer);
 
                 m_depthBuffer = new byte[m_depthBufferWidth * m_depthBufferHeight];
 
 				StartCoroutine(UpdateDepthBufferCoroutine());
+				m_isInitialized = true;
             }
-            else
-            {
-                m_actorTransform.position = pos;
-                m_actorTransform.rotation = rot;
-            }
-
-			// Face the camera
-			m_actorTransform.LookAt(m_cameraToLookAt.transform);
         }
     }
 
     // Helpers
-    private void UpdateDepthBufferTexture()
+    private void UpdateDepthBuffer()
 	{
 		ARPoint point = new ARPoint {
 			x = 0.0f,
 			y = 0.0f
 		};
 
-		// TMP:Start
 		float xdelta = 1.0f / m_depthBufferWidth;
 		float ydelta = 1.0f / m_depthBufferHeight;
 		var arSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
@@ -75,25 +74,32 @@ public class DepthBufferSceneController : MonoBehaviour {
 			for (int x = 0; x < m_depthBufferWidth; ++x) {
 				List<ARHitTestResult> hitResults = arSession.HitTest(point, ARHitTestResultType.ARHitTestResultTypeFeaturePoint);
 				if (hitResults.Count > 0) {
-						m_depthBuffer[offset++] = (byte)(hitResults[0].distance * 255);
+					m_depthBuffer[offset] = (byte)(hitResults [0].distance * 255);
+				} else {
+					m_depthBuffer[offset] = 0;
 				}
+				offset++;
 				point.x = point.x + xdelta;
 			}
 			point.y = point.y + ydelta;
 			point.x = 0.0f;
 		}
-		// TMP: Ends
-
-		m_depthBufferTexture.LoadRawTextureData(m_depthBuffer);
-		m_depthBufferTexture.Apply ();
     }
+
+	void ApplyDepthBuffer()
+	{
+		m_depthBufferTexture.LoadRawTextureData(m_depthBuffer);
+		m_depthBufferTexture.Apply();
+	}
     
     private IEnumerator UpdateDepthBufferCoroutine()
     {
         while (true)
         {
-			UpdateDepthBufferTexture();
-            yield return new WaitForSeconds(m_secondsPerUpdate);
+			UpdateDepthBuffer();
+			ApplyDepthBuffer();
+            
+			yield return new WaitForSeconds(m_secondsPerUpdate);
         }
     }
 }
