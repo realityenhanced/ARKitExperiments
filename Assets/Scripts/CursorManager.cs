@@ -49,7 +49,7 @@ public class CursorManager : MonoBehaviour {
 			UnityARSessionNativeInterface.GetARSessionNativeInterface().HitTest(m_hitPointToUse, m_resultTypeToUse);
 
 		if (hitResults.Count > 0) {
-			ARHitTestResult hitResult = GetFirstValidHit(hitResults);
+			ARHitTestResult hitResult = Utils.GetFirstValidHit(hitResults);
 			if (hitResult.isValid) {
 				transformToUpdate.position = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
 				transformToUpdate.rotation = UnityARMatrixOps.GetRotation(hitResult.worldTransform);
@@ -64,17 +64,5 @@ public class CursorManager : MonoBehaviour {
 		}
 
 		return wasTransformUpdated;	
-	}
-
-	static ARHitTestResult GetFirstValidHit(List<ARHitTestResult> hitResults)
-	{
-		ARHitTestResult hitResult = hitResults[0]; // Return the first hit, if no valid hits were found.
-		foreach (var h in hitResults) {
-			if (h.isValid) {
-				hitResult = h;
-				break;
-			}
-		}
-		return hitResult;
 	}
 }
