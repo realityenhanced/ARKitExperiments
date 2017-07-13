@@ -33,3 +33,11 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Assets/GoogleCastRemoteDisplay_LICENSE
+Assets/GoogleCastRemoteDisplay_LICENSE.meta
+Assets/Plugins/Android/GoogleCastRemoteDisplay.aar
+Assets/Plugins/Android/GoogleCastRemoteDisplay.aar.meta
+Assets/Plugins/GoogleCastRemoteDisplay.meta
+Assets/Plugins/GoogleCastRemoteDisplay/
+Assets/Plugins/iOS/GoogleCastRemoteDisplay.meta
+Assets/Plugins/iOS/GoogleCastRemoteDisplay/

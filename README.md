@@ -3,6 +3,10 @@ Quick and dirty experiments with ARKit
 
 Shadow Experiment Video @ https://youtu.be/nxTQbGyFHkc
 
+# Plugins that you need to import to build
+## Google Cast Remote Display 
+From https://www.assetstore.unity3d.com/en/#!/content/50168
+
 # Helpful Resources
 ## How to set up Unity for ARKit?
 https://forum.unity3d.com/threads/arkit-support-for-ios-via-unity-arkit-plugin.474385/
