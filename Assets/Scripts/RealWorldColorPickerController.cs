@@ -16,11 +16,13 @@ public class RealWorldColorPickerController : MonoBehaviour {
 	UnityARVideo m_arVideo;
 	Texture2D m_centerPixTex;
 	bool m_isCursorHidden = false;
+	Material m_materialToUpdate;
 
 	// Use this for initialization
 	void Start () {
 		m_arVideo = m_arCamera.GetComponent<UnityARVideo> ();
 		m_centerPixTex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+		m_materialToUpdate = Utils.FindMaterialOnObject(m_objectToColor, "COLOR BASICO 04");
 	}
 	
 	// Update is called once per frame
@@ -30,7 +32,8 @@ public class RealWorldColorPickerController : MonoBehaviour {
 			Resolution res = Screen.currentResolution;
 			int x = res.width / 2 - 1;
 			int y = res.height / 2 - 1;
-			m_objectToColor.GetComponent<MeshRenderer>().material.color = GetRealWorldColorAt (x, y);
+
+			m_materialToUpdate.color = GetRealWorldColorAt (x, y);
 
 			m_cursorManager.Enable();
 			m_isCursorHidden = false;
