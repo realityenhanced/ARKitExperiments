@@ -2,6 +2,7 @@
 Quick and dirty experiments with ARKit
 
 Shadow Experiment Video @ https://youtu.be/nxTQbGyFHkc
+Real world color picker video @ https://youtu.be/pS5aJsy1MLk
 
 # Plugins that you need to import to build
 ## Google Cast Remote Display 
@@ -19,4 +20,5 @@ https://developer.apple.com/documentation/arkit/understanding_augmented_reality
 
 ## Credits
 Rooster model from https://www.blendswap.com/blends/view/80230 released under CC-0 by [CDmir230](https://www.blendswap.com/user/CDmir230)
+
 Hippo model from https://www.blendswap.com/blends/view/71760 released under CC-BY license by [WIRLOW](https://www.blendswap.com/user/WIRLOW)
