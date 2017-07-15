@@ -42,7 +42,7 @@ public class RealWorldColorPickerController : MonoBehaviour {
 				if (m_actor == null) {
 					var go = Utils.SpawnGameObjectAt (m_actorPrefab, pos, rot);
 					m_materialToUpdate = Utils.FindMaterialOnObject(go, "COLOR BASICO 04");
-					m_actorAnimator = go.GetComponent<Animator> ();
+					m_actorAnimator = go.GetComponentInChildren<Animator> ();
 				}
 
 				if (m_shadowPlane == null) {
