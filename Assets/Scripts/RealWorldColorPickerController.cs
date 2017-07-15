@@ -9,31 +9,56 @@ public class RealWorldColorPickerController : MonoBehaviour {
 	// Script inputs
 	public Camera m_arCamera;
 	public int m_offsetFromCenter = 10;
-	public GameObject m_objectToColor;
+	public GameObject m_actorPrefab;
+	public GameObject m_shadowPlanePrefab;
 	public CursorManager m_cursorManager;
 
 	// Privates
 	UnityARVideo m_arVideo;
 	Texture2D m_centerPixTex;
+	bool m_isObjectPlaced = false;
 	bool m_isCursorHidden = false;
 	Material m_materialToUpdate;
+	GameObject m_actor;
+	GameObject m_shadowPlane;
+	int m_animationId;
+	Animator m_actorAnimator;
 
 	// Use this for initialization
 	void Start () {
 		m_arVideo = m_arCamera.GetComponent<UnityARVideo> ();
 		m_centerPixTex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
-		m_materialToUpdate = Utils.FindMaterialOnObject(m_objectToColor, "COLOR BASICO 04");
+		m_animationId = Animator.StringToHash ("wasColored");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (m_isCursorHidden) {
+		if (!m_isObjectPlaced) {
+			if (Utils.WasTouchDetected()) {
+				// Place the actor & it's shadow plane at the last detected cursor postion.
+				var pos = m_cursorManager.GetCurrentCursorPosition();
+				var rot = m_cursorManager.GetCurrentCursorRotation();
+
+				if (m_actor == null) {
+					var go = Utils.SpawnGameObjectAt (m_actorPrefab, pos, rot);
+					m_materialToUpdate = Utils.FindMaterialOnObject(go, "COLOR BASICO 04");
+					m_actorAnimator = go.GetComponent<Animator> ();
+				}
+
+				if (m_shadowPlane == null) {
+					m_shadowPlane = Utils.SpawnGameObjectAt(m_shadowPlanePrefab, pos, rot);
+				}
+
+				m_isObjectPlaced = true;
+			}
+		} else if (m_isCursorHidden) {
 			Debug.Log ("Capture color and enable cursor");
 			Resolution res = Screen.currentResolution;
 			int x = res.width / 2 - 1;
 			int y = res.height / 2 - 1;
 
 			m_materialToUpdate.color = GetRealWorldColorAt (x, y);
+			m_actorAnimator.SetTrigger (m_animationId);
 
 			m_cursorManager.Enable();
 			m_isCursorHidden = false;
