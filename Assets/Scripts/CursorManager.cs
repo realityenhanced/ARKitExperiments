@@ -40,6 +40,14 @@ public class CursorManager : MonoBehaviour {
 		return m_cursorTransform.rotation;
 	}
 
+	public void Enable() {
+		m_cursorTransform.gameObject.SetActive(true);
+	}
+
+	public void Disable() {
+		m_cursorTransform.gameObject.SetActive(false);
+	}
+
 	// Helpers
 	bool UpdateTransformUsingWorldHitPoint(Transform transformToUpdate) {
 

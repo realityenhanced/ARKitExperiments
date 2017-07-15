@@ -1,0 +1,134 @@
+fileFormatVersion: 2
+guid: 88c7be45a76784ece9bdaef1997c39c9
+timeCreated: 1500082582
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Character
+    100004: Ear.L
+    100006: Ear.L_end
+    100008: Ear.R
+    100010: Ear.R_end
+    100012: Eye.L
+    100014: Eye.L_end
+    100016: Eye.R
+    100018: Eye.R_end
+    100020: EyeLeft
+    100022: EyeRight
+    100024: Hand.L
+    100026: Hand.L_end
+    100028: Hand.R
+    100030: Hand.R_end
+    100032: Head
+    100034: //RootNode
+    100036: Leg.L
+    100038: Leg.L_end
+    100040: Leg.R
+    100042: Leg.R_end
+    100044: Root
+    400000: Armature
+    400002: Character
+    400004: Ear.L
+    400006: Ear.L_end
+    400008: Ear.R
+    400010: Ear.R_end
+    400012: Eye.L
+    400014: Eye.L_end
+    400016: Eye.R
+    400018: Eye.R_end
+    400020: EyeLeft
+    400022: EyeRight
+    400024: Hand.L
+    400026: Hand.L_end
+    400028: Hand.R
+    400030: Hand.R_end
+    400032: Head
+    400034: //RootNode
+    400036: Leg.L
+    400038: Leg.L_end
+    400040: Leg.R
+    400042: Leg.R_end
+    400044: Root
+    4300000: Character
+    4300002: EyeRight
+    4300004: EyeLeft
+    7400000: Armature|EntryAction
+    7400002: Armature|HippoJump
+    7400004: Armature|HippoSlideIn
+    7400006: Armature|IdleAction
+    9500000: //RootNode
+    13700000: Character
+    13700002: EyeLeft
+    13700004: EyeRight
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
