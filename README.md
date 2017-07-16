@@ -6,9 +6,9 @@ Shadow Experiment Video @ https://youtu.be/nxTQbGyFHkc
 Real world color picker video @ https://youtu.be/pS5aJsy1MLk
 
 # Software Versions used
-## Unity: 5.6.1p4
-## XCode: XCode 9 Beta 3
-## Unity ARKit Plugin: version 1.0.1
+#### Unity: 5.6.1p4
+#### XCode: XCode 9 Beta 3
+#### Unity ARKit Plugin: version 1.0.1
 
 # Helpful Resources
 ## How to set up Unity for ARKit?
