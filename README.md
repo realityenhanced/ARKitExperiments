@@ -5,9 +5,10 @@ Shadow Experiment Video @ https://youtu.be/nxTQbGyFHkc
 
 Real world color picker video @ https://youtu.be/pS5aJsy1MLk
 
-# Plugins that you need to import to build
-## Google Cast Remote Display 
-From https://www.assetstore.unity3d.com/en/#!/content/50168
+# Software Versions used
+## Unity: 5.6.1p4
+## XCode: XCode 9 Beta 3
+## Unity ARKit Plugin: version 1.0.1
 
 # Helpful Resources
 ## How to set up Unity for ARKit?
