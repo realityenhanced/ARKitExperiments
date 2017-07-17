@@ -33,6 +33,10 @@ public class OcclusionSceneController : ShadowSceneController {
 			actorHeight -= incrementPerUpdate;
 			yield return new WaitForSeconds (1.0f / updatesPerSecond);
 		}
+
+		// Start animating the actor after moving it up.
+		var animator = m_actorTransform.gameObject.GetComponentInChildren<Animator>();
+		animator.SetTrigger (Animator.StringToHash ("startAnimating"));
 	}
 
 	void PlaceOcclusionPlaneAtCursor(){
