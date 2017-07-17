@@ -81,4 +81,17 @@ public class Utils
 
 		return materialInstance;
 	}
+
+	public static float GetWorldSpaceHeight(GameObject go) {
+		float height = 0.0f;
+
+		var boxCollider = go.GetComponent<BoxCollider> ();
+		if (boxCollider) {
+			height = boxCollider.bounds.extents.y * 2;
+		} else {
+			Debug.LogError ("GetWorldSpaceHeight: GameObject doesnt have a Box Collider set.");
+		}
+
+		return height;
+	}
 }
