@@ -10,8 +10,8 @@ public class ShadowSceneController : SceneController {
 	public GameObject m_shadowPlanePrefab;
 
 	// Privates
-	Transform m_actorTransform;
-	Transform m_shadowPlaneTransform;
+	protected Transform m_actorTransform;
+	protected Transform m_shadowPlaneTransform;
 
 	// Update is called once per frame
 	void Update() {

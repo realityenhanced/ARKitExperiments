@@ -14,7 +14,6 @@ public class RealWorldColorPickerController : MonoBehaviour {
 	public CursorManager m_cursorManager;
 
 	// Privates
-	UnityARVideo m_arVideo;
 	Texture2D m_centerPixTex;
 	bool m_isObjectPlaced = false;
 	bool m_isCursorHidden = false;
@@ -26,7 +25,6 @@ public class RealWorldColorPickerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		m_arVideo = m_arCamera.GetComponent<UnityARVideo> ();
 		m_centerPixTex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
 		m_animationId = Animator.StringToHash ("wasColored");
 	}
@@ -40,9 +38,9 @@ public class RealWorldColorPickerController : MonoBehaviour {
 				var rot = m_cursorManager.GetCurrentCursorRotation();
 
 				if (m_actor == null) {
-					var go = Utils.SpawnGameObjectAt (m_actorPrefab, pos, rot);
-					m_materialToUpdate = Utils.FindMaterialOnObject(go, "COLOR BASICO 04");
-					m_actorAnimator = go.GetComponentInChildren<Animator> ();
+					m_actor = Utils.SpawnGameObjectAt (m_actorPrefab, pos, rot);
+					m_materialToUpdate = Utils.FindMaterialOnObject(m_actor, "COLOR BASICO 04");
+					m_actorAnimator = m_actor.GetComponentInChildren<Animator> ();
 				}
 
 				if (m_shadowPlane == null) {
