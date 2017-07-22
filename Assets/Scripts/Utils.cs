@@ -5,9 +5,14 @@ using System.Collections.Generic;
 
 public class Utils
 {
-	static public bool WasTouchDetected()
+	static public bool WasTouchStartDetected()
 	{
 		return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Began;
+	}
+
+	static public bool WasTouchStopDetected()
+	{
+		return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Ended;
 	}
 
 	static public GameObject SpawnGameObjectAt(GameObject prefab, Vector3 pos, Quaternion rot)

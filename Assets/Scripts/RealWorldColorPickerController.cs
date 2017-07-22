@@ -32,7 +32,7 @@ public class RealWorldColorPickerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!m_isObjectPlaced) {
-			if (Utils.WasTouchDetected()) {
+			if (Utils.WasTouchStartDetected()) {
 				// Place the actor & it's shadow plane at the last detected cursor postion.
 				var pos = m_cursorManager.GetCurrentCursorPosition();
 				var rot = m_cursorManager.GetCurrentCursorRotation();
@@ -60,7 +60,7 @@ public class RealWorldColorPickerController : MonoBehaviour {
 
 			m_cursorManager.Enable();
 			m_isCursorHidden = false;
-		} else if (Utils.WasTouchDetected()) {
+		} else if (Utils.WasTouchStartDetected()) {
 			Debug.Log ("Hide cursor and render a frame before capturing the color.");
 			m_cursorManager.Disable();
 			m_isCursorHidden = true;
