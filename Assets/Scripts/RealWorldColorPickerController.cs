@@ -77,7 +77,8 @@ public class RealWorldColorPickerController : MonoBehaviour {
 
 		// Hacky: Make sure the pixel is not occluded by the cursor.
 		m_centerPixTex.ReadPixels(
-			new Rect(Screen.currentResolution.width/2 - 1, Screen.currentResolution.height/2 - 1, 1,1), 0, 0);
+			new Rect(x, y, 1, 1),
+			0, 0);
 		m_centerPixTex.Apply();
 
 		realWorldColor = m_centerPixTex.GetPixels()[0];

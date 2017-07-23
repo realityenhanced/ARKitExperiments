@@ -101,10 +101,15 @@ public class Utils
 		return height;
 	}
 
-	public static void SavePointCloudToPlyFile(List<Vector3> pointCloud, string fileName) {
+	public static void SavePointCloudToPlyFile(List<Vector3> pointCloud, List<Color> pointColors, string fileName) {
+		if (pointCloud.Count != pointColors.Count) {
+			Debug.LogError ("SavePointCloudToPlyFile: Invalid input.");
+			return;
+		}
+
 		string path = Application.persistentDataPath + "/" + fileName;
 		using (StreamWriter fileWriter = File.CreateText (path)) {
-			// Format : https://people.sc.fsu.edu/~jburkardt/data/ply/ply.html
+			// Format description @ http://paulbourke.net/dataformats/ply/
 
 			// Ply Header
 			fileWriter.WriteLine ("ply");
@@ -113,11 +118,19 @@ public class Utils
 			fileWriter.WriteLine ("property float32 x");
 			fileWriter.WriteLine ("property float32 y");
 			fileWriter.WriteLine ("property float32 z");
+			fileWriter.WriteLine ("property uchar red");
+			fileWriter.WriteLine ("property uchar green");
+			fileWriter.WriteLine ("property uchar blue");
 			fileWriter.WriteLine ("end_header");
 
-			// points
-			foreach (var point in pointCloud) {
-				fileWriter.WriteLine ("{0} {1} {2}", point.x, point.y, point.z);
+			// point & colors
+			for (int i=0; i<pointCloud.Count; ++i) {
+				var point = pointCloud [i];
+				var color = pointColors [i];
+				fileWriter.WriteLine ("{0} {1} {2} {3} {4} {5}", 
+					point.x, point.y, point.z,
+					(byte)(color.r * 255.0f), (byte)(color.g * 255.0f), (byte)(color.b * 255.0f)
+				);
 			}
 		}
 	}

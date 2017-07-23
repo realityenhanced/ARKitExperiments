@@ -14,13 +14,17 @@ public class PointCloudSceneController : SceneController {
 
 	// Privates
 	List<Vector3> m_pointCloud;
+	List<Color> m_pointColors;
 	ParticleSystem m_particleSystem;
 	bool m_isScreenPressed = false;
 	Vector3 m_lastPosition = Vector3.zero;
 	uint m_currentPointCloudId = 0;
+	Texture2D m_screenPixelTexture;
+	bool m_shouldSampleColorOnNextFrame = false;
 
 	void Start() {
 		m_pointCloud = new List<Vector3> ();
+		m_pointColors = new List<Color> ();
 		m_particleSystem = Instantiate (m_particleSystemPrefab);
 
 		// Clear any ply files that were written last time.
@@ -30,44 +34,108 @@ public class PointCloudSceneController : SceneController {
 	// Update is called once per frame
 	void Update () {
 		if (Utils.WasTouchStartDetected ()) {
-			m_pointCloud.Clear ();
-			AddPoint(m_cursorManager.GetCurrentCursorPosition ());
+			m_shouldSampleColorOnNextFrame = false;
+			ClearPointCloud ();
+			AddPoint (m_cursorManager.GetCurrentCursorPosition ());
 			m_isScreenPressed = true;
 		} else if (Utils.WasTouchStopDetected ()) {
-			Utils.SavePointCloudToPlyFile(m_pointCloud, "PointCloud_" + m_currentPointCloudId + ".ply");
+			if (m_shouldSampleColorOnNextFrame) {
+				SampleColor ();
+			}
+			UpdateParticles (true);
+			Utils.SavePointCloudToPlyFile (m_pointCloud, m_pointColors, "PointCloud_" + m_currentPointCloudId + ".ply");
+
 			++m_currentPointCloudId;
 			m_isScreenPressed = false;
 		} else if (m_isScreenPressed) {
-			Vector3 currentPos = m_cursorManager.GetCurrentCursorPosition ();
-			float distance = Vector3.Distance (currentPos, m_lastPosition);
-			Debug.Log ("Distance = " + distance.ToString ());
-			if (distance > m_lowerThreshold && distance < m_upperThreshold) {
-				AddPoint (currentPos);
+			if (m_shouldSampleColorOnNextFrame) {
+				SampleColor ();
+			} else {
+				Vector3 currentPos = m_cursorManager.GetCurrentCursorPosition ();
+				float distance = Vector3.Distance (currentPos, m_lastPosition);
+				Debug.Log ("Distance = " + distance.ToString ());
+				if (distance > m_lowerThreshold && distance < m_upperThreshold) {
+					AddPoint (currentPos);
+				}
 			}
 		}
 	}
 
+	// Helpers
 	void AddPoint(Vector3 point) {
 		m_pointCloud.Add (point);
 		m_lastPosition = point;
-		UpdateParticles ();
+		UpdateParticles (false);
+
+		// Render only the phone's camera view on the next frame for capturing the color.
+		ShowSceneElements(false);
+		m_shouldSampleColorOnNextFrame = true;
 	}
 
-	void UpdateParticles() {
+	void HideParticles ()
+	{
+		ParticleSystem.Particle[] particles = new ParticleSystem.Particle[1];
+		particles [0].startSize = 0.0f;
+		m_particleSystem.SetParticles (particles, 1);
+	}
+
+	void UpdateParticles(bool shouldShowPointColor) {
 		if (m_pointCloud.Count > 0) {
 			int numParticles = m_pointCloud.Count;
 			ParticleSystem.Particle[] particles = new ParticleSystem.Particle[numParticles];
 			for (int i = 0; i < numParticles; ++i) {
 				Vector3 currentPoint = m_pointCloud [i];
 				particles [i].position = currentPoint;
-				particles [i].startColor = m_particleColor;
+
+				if (shouldShowPointColor) {
+					particles [i].startColor = m_pointColors [i];
+				} else {
+					particles [i].startColor = m_particleColor;					
+				}
+
 				particles [i].startSize = m_particleSize;
 			}
 			m_particleSystem.SetParticles (particles, numParticles);
 		} else {
-			ParticleSystem.Particle[] particles = new ParticleSystem.Particle[1];
-			particles [0].startSize = 0.0f;
-			m_particleSystem.SetParticles (particles, 1);
+			HideParticles ();
 		}
+	}
+
+	Color GetScreenColorAt(int x, int y) {
+		if (!m_screenPixelTexture) {
+			m_screenPixelTexture = new Texture2D (1, 1, TextureFormat.RGBA32, false);
+		}
+
+		m_screenPixelTexture.ReadPixels(
+			new Rect(x, y, 1, 1),
+			0, 0);
+		m_screenPixelTexture.Apply();
+
+		return m_screenPixelTexture.GetPixels()[0];
+	}
+
+	void ClearPointCloud ()
+	{
+		m_pointCloud.Clear ();
+		m_pointColors.Clear ();
+	}
+
+	void ShowSceneElements (bool shouldShow)
+	{
+		if (shouldShow) {
+			m_cursorManager.Enable ();
+			UpdateParticles (false);
+		} else {
+			m_cursorManager.Disable ();
+			HideParticles ();
+		}
+	}
+
+	void SampleColor ()
+	{
+		var color = GetScreenColorAt (Screen.currentResolution.width / 2 - 1, Screen.currentResolution.height / 2 - 1);
+		m_pointColors.Add (color);
+		ShowSceneElements (true);
+		m_shouldSampleColorOnNextFrame = false;
 	}
 }
