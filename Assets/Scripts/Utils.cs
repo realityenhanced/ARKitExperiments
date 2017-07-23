@@ -101,11 +101,25 @@ public class Utils
 		return height;
 	}
 
-	public static void SavePointCloudToPlyFile(string fileName) {
+	public static void SavePointCloudToPlyFile(List<Vector3> pointCloud, string fileName) {
 		string path = Application.persistentDataPath + "/" + fileName;
-		StreamWriter fileWriter = File.CreateText(path);
-		fileWriter.WriteLine("Hello world");
-		fileWriter.Close();  
+		using (StreamWriter fileWriter = File.CreateText (path)) {
+			// Format : https://people.sc.fsu.edu/~jburkardt/data/ply/ply.html
+
+			// Ply Header
+			fileWriter.WriteLine ("ply");
+			fileWriter.WriteLine ("format ascii 1.0");
+			fileWriter.WriteLine ("element vertex {0}", pointCloud.Count);
+			fileWriter.WriteLine ("property float32 x");
+			fileWriter.WriteLine ("property float32 y");
+			fileWriter.WriteLine ("property float32 z");
+			fileWriter.WriteLine ("end_header");
+
+			// points
+			foreach (var point in pointCloud) {
+				fileWriter.WriteLine ("{0} {1} {2}", point.x, point.y, point.z);
+			}
+		}
 	}
 
 	public static void DeleteAllAppFiles() {

@@ -34,7 +34,7 @@ public class PointCloudSceneController : SceneController {
 			AddPoint(m_cursorManager.GetCurrentCursorPosition ());
 			m_isScreenPressed = true;
 		} else if (Utils.WasTouchStopDetected ()) {
-			Utils.SavePointCloudToPlyFile("PointCloud_" + m_currentPointCloudId + ".ply");
+			Utils.SavePointCloudToPlyFile(m_pointCloud, "PointCloud_" + m_currentPointCloudId + ".ply");
 			++m_currentPointCloudId;
 			m_isScreenPressed = false;
 		} else if (m_isScreenPressed) {
