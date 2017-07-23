@@ -99,4 +99,7 @@ public class Utils
 
 		return height;
 	}
+
+	public static void SavePointCloudToPlyFile(string fileName) {
+	}
 }

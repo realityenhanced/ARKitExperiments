@@ -17,6 +17,7 @@ public class PointCloudSceneController : SceneController {
 	ParticleSystem m_particleSystem;
 	bool m_isScreenPressed = false;
 	Vector3 m_lastPosition = Vector3.zero;
+	uint m_currentPointCloudId = 0;
 
 	void Start() {
 		m_pointCloud = new List<Vector3> ();
@@ -26,21 +27,27 @@ public class PointCloudSceneController : SceneController {
 	// Update is called once per frame
 	void Update () {
 		if (Utils.WasTouchStartDetected ()) {
+			m_pointCloud.Clear ();
+			AddPoint(m_cursorManager.GetCurrentCursorPosition ());
 			m_isScreenPressed = true;
 		} else if (Utils.WasTouchStopDetected ()) {
+			Utils.SavePointCloudToPlyFile("PointCloud_" + m_currentPointCloudId + ".ply");
+			++m_currentPointCloudId;
 			m_isScreenPressed = false;
-		}
-
-		if (m_isScreenPressed) {
+		} else if (m_isScreenPressed) {
 			Vector3 currentPos = m_cursorManager.GetCurrentCursorPosition ();
-			float distance = (m_lastPosition - currentPos).magnitude;
+			float distance = Vector3.Distance (currentPos, m_lastPosition);
 			Debug.Log ("Distance = " + distance.ToString ());
 			if (distance > m_lowerThreshold && distance < m_upperThreshold) {
-				m_pointCloud.Add (m_cursorManager.GetCurrentCursorPosition ());
-				UpdateParticles ();
-				m_lastPosition = currentPos;
+				AddPoint (currentPos);
 			}
 		}
+	}
+
+	void AddPoint(Vector3 point) {
+		m_pointCloud.Add (point);
+		m_lastPosition = point;
+		UpdateParticles ();
 	}
 
 	void UpdateParticles() {
