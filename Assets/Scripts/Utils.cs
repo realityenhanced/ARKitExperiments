@@ -101,5 +101,9 @@ public class Utils
 	}
 
 	public static void SavePointCloudToPlyFile(string fileName) {
+		string path = Application.persistentDataPath + "/" + fileName;
+		System.IO.StreamWriter fileWriter = System.IO.File.CreateText(path);
+		fileWriter.WriteLine("Hello world");
+		fileWriter.Close();  
 	}
 }
