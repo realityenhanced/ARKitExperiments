@@ -22,6 +22,9 @@ public class PointCloudSceneController : SceneController {
 	void Start() {
 		m_pointCloud = new List<Vector3> ();
 		m_particleSystem = Instantiate (m_particleSystemPrefab);
+
+		// Clear any ply files that were written last time.
+		Utils.DeleteAllAppFiles ();
 	}
 
 	// Update is called once per frame

@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.XR.iOS;
 using System.Collections.Generic;
+using System.IO;
 
 public class Utils
 {
@@ -102,8 +103,16 @@ public class Utils
 
 	public static void SavePointCloudToPlyFile(string fileName) {
 		string path = Application.persistentDataPath + "/" + fileName;
-		System.IO.StreamWriter fileWriter = System.IO.File.CreateText(path);
+		StreamWriter fileWriter = File.CreateText(path);
 		fileWriter.WriteLine("Hello world");
 		fileWriter.Close();  
+	}
+
+	public static void DeleteAllAppFiles() {
+		DirectoryInfo di = new DirectoryInfo (Application.persistentDataPath);
+		foreach (FileInfo file in di.GetFiles())
+		{
+			file.Delete(); 
+		}
 	}
 }
