@@ -16,7 +16,7 @@ public class PointCloudSceneController : SceneController {
 	List<Vector3> m_pointCloud;
 	List<Color> m_pointColors;
 	ParticleSystem m_particleSystem;
-	bool m_isScreenPressed = false;
+	bool m_isCaptureInProgress = false;
 	Vector3 m_lastPosition = Vector3.zero;
 	uint m_currentPointCloudId = 0;
 	Texture2D m_screenPixelTexture;
@@ -34,26 +34,20 @@ public class PointCloudSceneController : SceneController {
 	// Update is called once per frame
 	void Update () {
 		if (Utils.WasTouchStartDetected ()) {
-			m_shouldSampleColorOnNextFrame = false;
-			ClearPointCloud ();
-			AddPoint (m_cursorManager.GetCurrentCursorPosition ());
-			m_isScreenPressed = true;
-		} else if (Utils.WasTouchStopDetected ()) {
-			if (m_shouldSampleColorOnNextFrame) {
-				SampleColor ();
+			if (m_isCaptureInProgress) {
+				StopCaptureSession ();
+				m_isCaptureInProgress = false;
+			} else {
+				ClearPointCloud ();
+				AddPoint (m_cursorManager.GetCurrentCursorPosition ());
+				m_isCaptureInProgress = true;
 			}
-			UpdateParticles (true);
-			Utils.SavePointCloudToPlyFile (m_pointCloud, m_pointColors, "PointCloud_" + m_currentPointCloudId + ".ply");
-
-			++m_currentPointCloudId;
-			m_isScreenPressed = false;
-		} else if (m_isScreenPressed) {
+		} else if (m_isCaptureInProgress) {
 			if (m_shouldSampleColorOnNextFrame) {
 				SampleColor ();
 			} else {
 				Vector3 currentPos = m_cursorManager.GetCurrentCursorPosition ();
 				float distance = Vector3.Distance (currentPos, m_lastPosition);
-				Debug.Log ("Distance = " + distance.ToString ());
 				if (distance > m_lowerThreshold && distance < m_upperThreshold) {
 					AddPoint (currentPos);
 				}
@@ -137,5 +131,18 @@ public class PointCloudSceneController : SceneController {
 		m_pointColors.Add (color);
 		ShowSceneElements (true);
 		m_shouldSampleColorOnNextFrame = false;
+	}
+
+	void StopCaptureSession ()
+	{
+		if (m_shouldSampleColorOnNextFrame) {
+			SampleColor ();
+		}
+
+		// Show actual point colors on the particles once capture session has ended.
+		UpdateParticles (true);
+
+		Utils.SavePointCloudToPlyFile (m_pointCloud, m_pointColors, "PointCloud_" + m_currentPointCloudId + ".ply");
+		++m_currentPointCloudId;
 	}
 }

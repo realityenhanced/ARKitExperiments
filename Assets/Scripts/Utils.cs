@@ -11,11 +11,6 @@ public class Utils
 		return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Began;
 	}
 
-	static public bool WasTouchStopDetected()
-	{
-		return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Ended;
-	}
-
 	static public GameObject SpawnGameObjectAt(GameObject prefab, Vector3 pos, Quaternion rot)
 	{
 		var actor = GameObject.Instantiate (prefab);	
