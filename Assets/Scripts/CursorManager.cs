@@ -56,9 +56,9 @@ public class CursorManager : MonoBehaviour {
 
 		bool wasCursorUpdated;
 		if (m_useAverageOfNeighbors) {
-			wasCursorUpdated = GetCursorPosition (ref position);
-		} else {
 			wasCursorUpdated = GetAverageCursorPosition (ref position);
+		} else {
+			wasCursorUpdated = GetCursorPosition (ref position);
 		}
 
 		m_cursorTransform.position = position;
