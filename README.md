@@ -7,6 +7,8 @@ Real world color picker video @ https://youtu.be/pS5aJsy1MLk
 
 Occlusion experiment video @ https://youtu.be/MK3D91kCKzM 
 
+Point cloud experiment video @ https://youtu.be/kupq1C41XcU
+
 # Software Versions used
 #### Unity: 5.6.1p4
 #### XCode: XCode 9 Beta 3
