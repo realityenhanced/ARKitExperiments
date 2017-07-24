@@ -22,7 +22,9 @@ public class PointCloudSceneController : SceneController {
 	Texture2D m_screenPixelTexture;
 	bool m_shouldSampleColorOnNextFrame = false;
 
-	void Start() {
+	protected override void Start() {
+		base.Start();
+
 		m_pointCloud = new List<Vector3> ();
 		m_pointColors = new List<Color> ();
 		m_particleSystem = Instantiate (m_particleSystemPrefab);

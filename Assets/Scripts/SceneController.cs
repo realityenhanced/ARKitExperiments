@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SceneController : MonoBehaviour {
-	void Start () {
+	protected virtual void Start () {
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;	
 	}
 }
