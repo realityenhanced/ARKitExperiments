@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.XR.iOS;
 using System.Collections.Generic;
+using System.IO;
 
 public class Utils
 {
-	static public bool WasTouchDetected()
+	static public bool WasTouchStartDetected()
 	{
 		return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Began;
 	}
@@ -93,5 +94,47 @@ public class Utils
 		}
 
 		return height;
+	}
+
+	public static void SavePointCloudToPlyFile(List<Vector3> pointCloud, List<Color> pointColors, string fileName) {
+		if (pointCloud.Count != pointColors.Count) {
+			Debug.LogError ("SavePointCloudToPlyFile: Invalid input.");
+			return;
+		}
+
+		string path = Application.persistentDataPath + "/" + fileName;
+		using (StreamWriter fileWriter = File.CreateText (path)) {
+			// Format description @ http://paulbourke.net/dataformats/ply/
+
+			// Ply Header
+			fileWriter.WriteLine ("ply");
+			fileWriter.WriteLine ("format ascii 1.0");
+			fileWriter.WriteLine ("element vertex {0}", pointCloud.Count);
+			fileWriter.WriteLine ("property float32 x");
+			fileWriter.WriteLine ("property float32 y");
+			fileWriter.WriteLine ("property float32 z");
+			fileWriter.WriteLine ("property uchar red");
+			fileWriter.WriteLine ("property uchar green");
+			fileWriter.WriteLine ("property uchar blue");
+			fileWriter.WriteLine ("end_header");
+
+			// point & colors
+			for (int i=0; i<pointCloud.Count; ++i) {
+				var point = pointCloud [i];
+				var color = pointColors [i];
+				fileWriter.WriteLine ("{0} {1} {2} {3} {4} {5}", 
+					point.x, point.y, point.z,
+					(byte)(color.r * 255.0f), (byte)(color.g * 255.0f), (byte)(color.b * 255.0f)
+				);
+			}
+		}
+	}
+
+	public static void DeleteAllAppFiles() {
+		DirectoryInfo di = new DirectoryInfo (Application.persistentDataPath);
+		foreach (FileInfo file in di.GetFiles())
+		{
+			file.Delete(); 
+		}
 	}
 }

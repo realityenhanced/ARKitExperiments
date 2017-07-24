@@ -37,7 +37,7 @@ public class DepthBufferSceneController : MonoBehaviour {
 	}
 
     void Update () {
-        if (Utils.WasTouchDetected())
+        if (Utils.WasTouchStartDetected())
         {
             if (!m_isInitialized)
             {

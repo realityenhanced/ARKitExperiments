@@ -13,7 +13,7 @@ public class OcclusionSceneController : ShadowSceneController {
 
 	// Update is called once per frame
 	void Update () {
-		if (Utils.WasTouchDetected ()) {
+		if (Utils.WasTouchStartDetected ()) {
 			PlaceActorAtCursor ();
 			PlaceOcclusionPlaneAtCursor ();
 
