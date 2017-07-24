@@ -13,12 +13,14 @@ public class CursorManager : MonoBehaviour {
 		y = 0.5f
 	};
 	const ARHitTestResultType m_resultTypeToUse = ARHitTestResultType.ARHitTestResultTypeFeaturePoint;
+	const float m_delta = 0.0005f;
 
 	// Private
 	private Transform m_cursorTransform;
 
 	// Public Inputs
 	public GameObject m_cursorPrefab;
+	public bool m_useAverageOfNeighbors = false;
 
 	// Use this for initialization
 	void Start () {
@@ -51,7 +53,14 @@ public class CursorManager : MonoBehaviour {
 	// Helpers
 	bool UpdateTransformUsingWorldHitPoint(Transform transformToUpdate) {
 		Vector3 position = Vector3.zero;
-		bool wasCursorUpdated = GetCursorPosition (ref position);
+
+		bool wasCursorUpdated;
+		if (m_useAverageOfNeighbors) {
+			wasCursorUpdated = GetCursorPosition (ref position);
+		} else {
+			wasCursorUpdated = GetAverageCursorPosition (ref position);
+		}
+
 		m_cursorTransform.position = position;
 		return wasCursorUpdated;	
 	}
@@ -65,6 +74,36 @@ public class CursorManager : MonoBehaviour {
 			if (hitResult.isValid) {
 				positionToUpdate = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
 				wasCursorFound = true;
+			}
+		}
+
+		return wasCursorFound;
+	}
+
+	bool GetAverageCursorPosition(ref Vector3 positionToUpdate) {
+		bool wasCursorFound = false;
+		float[] pointDeltas = { -m_delta, -m_delta, -m_delta, m_delta, m_delta, 0 };
+
+		Vector3 sum = Vector3.zero;
+		ARPoint point = new ARPoint ();
+		for (int i = 0; i < pointDeltas.GetLength (0) / 2; ++i) {			
+			point.x = m_hitPointToUse.x + pointDeltas [i * 2];
+			point.y = m_hitPointToUse.y + pointDeltas [i * 2 + 1];
+
+			List<ARHitTestResult> hitResults = 
+				UnityARSessionNativeInterface.GetARSessionNativeInterface ().HitTest (point, m_resultTypeToUse);
+			if (hitResults.Count > 0) {
+				ARHitTestResult hitResult = Utils.GetFirstValidHit (hitResults);
+				if (hitResult.isValid) {
+					sum += UnityARMatrixOps.GetPosition (hitResult.worldTransform);
+
+					if (i == 2) {
+						positionToUpdate = sum/3;
+						wasCursorFound = true;
+					}
+				} else {
+					break;
+				}
 			}
 		}
 
