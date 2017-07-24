@@ -50,27 +50,24 @@ public class CursorManager : MonoBehaviour {
 
 	// Helpers
 	bool UpdateTransformUsingWorldHitPoint(Transform transformToUpdate) {
+		Vector3 position = Vector3.zero;
+		bool wasCursorUpdated = GetCursorPosition (ref position);
+		m_cursorTransform.position = position;
+		return wasCursorUpdated;	
+	}
 
-		bool wasTransformUpdated = false;
-
+	bool GetCursorPosition(ref Vector3 positionToUpdate) {
+		bool wasCursorFound = false;
 		List<ARHitTestResult> hitResults = 
 			UnityARSessionNativeInterface.GetARSessionNativeInterface().HitTest(m_hitPointToUse, m_resultTypeToUse);
-
 		if (hitResults.Count > 0) {
-			ARHitTestResult hitResult = Utils.GetFirstValidHit(hitResults);
+			ARHitTestResult hitResult = Utils.GetFirstValidHit (hitResults);
 			if (hitResult.isValid) {
-				transformToUpdate.position = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
-				transformToUpdate.rotation = UnityARMatrixOps.GetRotation(hitResult.worldTransform);
-
-				Debug.Log (string.Format ("Pos x:{0:0.######} y:{1:0.######} z:{2:0.######}", 
-					transformToUpdate.position.x, transformToUpdate.position.y, transformToUpdate.position.z));
-				Debug.Log (string.Format ("Rot x:{0:0.######} y:{1:0.######} z:{2:0.######}", 
-					transformToUpdate.rotation.x, transformToUpdate.rotation.y, transformToUpdate.rotation.z));
-							
-				wasTransformUpdated = true;
+				positionToUpdate = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
+				wasCursorFound = true;
 			}
 		}
 
-		return wasTransformUpdated;	
+		return wasCursorFound;
 	}
 }
