@@ -11,9 +11,11 @@ public class UnityARCameraManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		m_session = UnityARSessionNativeInterface.GetARSessionNativeInterface();
+
 #if !UNITY_EDITOR
 		Application.targetFrameRate = 60;
-		m_session = UnityARSessionNativeInterface.GetARSessionNativeInterface();
         ARKitWorldTackingSessionConfiguration config = new ARKitWorldTackingSessionConfiguration();
         config.planeDetection = UnityARPlaneDetection.Horizontal;
         config.alignment = UnityARAlignment.UnityARAlignmentGravity;
@@ -56,7 +58,6 @@ public class UnityARCameraManager : MonoBehaviour {
 
 	// Update is called once per frame
 
-#if !UNITY_EDITOR
 	void Update () {
 		
         if (m_camera != null)
@@ -65,10 +66,10 @@ public class UnityARCameraManager : MonoBehaviour {
             Matrix4x4 matrix = m_session.GetCameraPose();
 			m_camera.transform.localPosition = UnityARMatrixOps.GetPosition(matrix);
 			m_camera.transform.localRotation = UnityARMatrixOps.GetRotation (matrix);
+
             m_camera.projectionMatrix = m_session.GetCameraProjection ();
         }
 
 	}
-#endif
 
 }

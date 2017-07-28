@@ -10,9 +10,9 @@ Occlusion experiment video @ https://youtu.be/MK3D91kCKzM
 Point cloud experiment video @ https://youtu.be/kupq1C41XcU
 
 # Software Versions used
-#### Unity: 5.6.1p4
-#### XCode: XCode 9 Beta 3
-#### Unity ARKit Plugin: version 1.0.1
+#### Unity: 5.6.2p4
+#### XCode: XCode 9 Beta 4
+#### Unity ARKit Plugin: version 1.0.5
 
 # Helpful Resources
 ## How to set up Unity for ARKit?
