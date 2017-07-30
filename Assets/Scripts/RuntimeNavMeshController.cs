@@ -1,6 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RuntimeNavMeshController : SceneController {
 
@@ -8,18 +9,24 @@ public class RuntimeNavMeshController : SceneController {
 	public GameObject m_generatedQuadPrefab;
 	public CursorManager m_cursorManager;
 	public Color m_quadColor = Color.blue;
+	public Transform m_quadsHolder;
+	public GameObject m_menuButtonPrefab;
 
 	// Privates
-	List<GameObject> m_generatedQuads = new List<GameObject>();
 	GameObject m_partialQuad;
 	Mesh m_partialMesh;
 	int m_numVerticesAdded = 0;
+	bool m_isInScanMode = true;
 
 	int[] COUNT_TO_INDEX_MAP =  new int[4] {3,1,2,0};
+
+	const string SCAN_MODE_TEXT = "Toggle [Scan]";
+	const string PLACE_MODE_TEXT = "Toggle [Place]";
 
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
+		UpdateButtonText ();
 	}
 	
 	// Update is called once per frame
@@ -35,7 +42,7 @@ public class RuntimeNavMeshController : SceneController {
 
 				if (m_numVerticesAdded == 4) {
 					m_partialMesh.RecalculateBounds ();
-					m_generatedQuads.Add (m_partialQuad);
+					m_partialQuad.transform.parent = m_quadsHolder;
 
 					m_partialMesh = null;
 					m_partialQuad = null;
@@ -43,6 +50,12 @@ public class RuntimeNavMeshController : SceneController {
 				}
 			}
 		}
+	}
+
+	public void OnToggleClicked() {
+		m_isInScanMode = !m_isInScanMode;
+		m_quadsHolder.gameObject.SetActive (m_isInScanMode);
+		UpdateButtonText ();
 	}
 
 	void InitializePartialMesh (Vector3 pos)
@@ -69,5 +82,9 @@ public class RuntimeNavMeshController : SceneController {
 			vertices [i] = pos;
 		}
 		m_partialMesh.vertices = vertices;
+	}
+
+	void UpdateButtonText() {
+		m_menuButtonPrefab.GetComponentInChildren<Text> ().text = m_isInScanMode ? SCAN_MODE_TEXT : PLACE_MODE_TEXT;
 	}
 }
