@@ -17,6 +17,7 @@ public class RuntimeNavMeshController : SceneController {
 	Mesh m_partialMesh;
 	int m_numVerticesAdded = 0;
 	bool m_isInScanMode = true;
+	LineRenderer m_lineRenderer;
 
 	int[] COUNT_TO_INDEX_MAP =  new int[4] {3,1,2,0};
 
@@ -27,14 +28,15 @@ public class RuntimeNavMeshController : SceneController {
 	protected override void Start () {
 		base.Start ();
 		UpdateButtonText ();
+
+		m_lineRenderer = GetComponent<LineRenderer> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Utils.WasTouchStartDetected ()) {
+		if (m_isInScanMode) {
 			Vector3 cursorPos = m_cursorManager.GetCurrentCursorPosition ();
-
-			if (m_isInScanMode) {
+			if (Utils.WasTouchStartDetected ()) {				
 				if (m_numVerticesAdded == 0) {
 					InitializePartialMesh (cursorPos);
 					++m_numVerticesAdded;
@@ -49,6 +51,12 @@ public class RuntimeNavMeshController : SceneController {
 						m_partialQuad = null;
 						m_numVerticesAdded = 0;
 					}
+				}
+			} else {
+				if (m_numVerticesAdded > 0) {
+					Debug.Log ("index = " + m_numVerticesAdded.ToString ());
+					Debug.Log (m_lineRenderer.positionCount);
+					m_lineRenderer.SetPosition (m_numVerticesAdded, cursorPos);
 				}
 			}
 		}
@@ -66,6 +74,8 @@ public class RuntimeNavMeshController : SceneController {
 		m_partialMesh = m_partialQuad.GetComponent<MeshFilter> ().mesh;
 		m_partialMesh.colors = new Color[4] { m_quadColor, m_quadColor, m_quadColor, m_quadColor };
 		InitMeshVertices (pos);
+
+		m_lineRenderer.SetPositions (new Vector3[4]{pos,pos,pos,pos});
 	}
 
 	void AddNextVertex (Vector3 cursorPos)
@@ -73,6 +83,10 @@ public class RuntimeNavMeshController : SceneController {
 		Vector3[] vertices = m_partialMesh.vertices;
 		vertices[COUNT_TO_INDEX_MAP [m_numVerticesAdded]] = cursorPos;
 		m_partialMesh.vertices = vertices;
+
+		Debug.Log ("index = " + m_numVerticesAdded.ToString ());
+		Debug.Log (m_lineRenderer.positionCount);
+		m_lineRenderer.SetPosition (m_numVerticesAdded, cursorPos);
 
 		++m_numVerticesAdded;
 	}
