@@ -34,19 +34,21 @@ public class RuntimeNavMeshController : SceneController {
 		if (Utils.WasTouchStartDetected ()) {
 			Vector3 cursorPos = m_cursorManager.GetCurrentCursorPosition ();
 
-			if (m_numVerticesAdded == 0) {
-				InitializePartialMesh (cursorPos);
-				++m_numVerticesAdded;
-			} else {
-				AddNextVertex (cursorPos);
+			if (m_isInScanMode) {
+				if (m_numVerticesAdded == 0) {
+					InitializePartialMesh (cursorPos);
+					++m_numVerticesAdded;
+				} else {
+					AddNextVertex (cursorPos);
 
-				if (m_numVerticesAdded == 4) {
-					m_partialMesh.RecalculateBounds ();
-					m_partialQuad.transform.parent = m_quadsHolder;
+					if (m_numVerticesAdded == 4) {
+						m_partialMesh.RecalculateBounds ();
+						m_partialQuad.transform.parent = m_quadsHolder;
 
-					m_partialMesh = null;
-					m_partialQuad = null;
-					m_numVerticesAdded = 0;
+						m_partialMesh = null;
+						m_partialQuad = null;
+						m_numVerticesAdded = 0;
+					}
 				}
 			}
 		}
