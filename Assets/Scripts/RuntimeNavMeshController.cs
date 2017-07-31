@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class RuntimeNavMeshController : SceneController {
 
@@ -11,13 +12,13 @@ public class RuntimeNavMeshController : SceneController {
 	public Color m_quadColor = Color.blue;
 	public Transform m_quadsHolder;
 	public GameObject m_menuButtonPrefab;
+	public LineRenderer m_lineRenderer;
 
 	// Privates
 	GameObject m_partialQuad;
 	Mesh m_partialMesh;
 	int m_numVerticesAdded = 0;
 	bool m_isInScanMode = true;
-	LineRenderer m_lineRenderer;
 
 	int[] COUNT_TO_INDEX_MAP =  new int[4] {3,1,2,0};
 
@@ -28,15 +29,19 @@ public class RuntimeNavMeshController : SceneController {
 	protected override void Start () {
 		base.Start ();
 		UpdateButtonText ();
-
-		m_lineRenderer = GetComponent<LineRenderer> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (m_isInScanMode) {
+			
 			Vector3 cursorPos = m_cursorManager.GetCurrentCursorPosition ();
-			if (Utils.WasTouchStartDetected ()) {				
+			if (Utils.WasTouchStartDetected ()) {
+				if (EventSystem.current.IsPointerOverGameObject ()) {
+					// Ignore touch events if a button is pressed
+					return;
+				}
+
 				if (m_numVerticesAdded == 0) {
 					InitializePartialMesh (cursorPos);
 					++m_numVerticesAdded;
@@ -54,8 +59,6 @@ public class RuntimeNavMeshController : SceneController {
 				}
 			} else {
 				if (m_numVerticesAdded > 0) {
-					Debug.Log ("index = " + m_numVerticesAdded.ToString ());
-					Debug.Log (m_lineRenderer.positionCount);
 					m_lineRenderer.SetPosition (m_numVerticesAdded, cursorPos);
 				}
 			}
@@ -65,6 +68,7 @@ public class RuntimeNavMeshController : SceneController {
 	public void OnToggleClicked() {
 		m_isInScanMode = !m_isInScanMode;
 		m_quadsHolder.gameObject.SetActive (m_isInScanMode);
+
 		UpdateButtonText ();
 	}
 
@@ -84,8 +88,6 @@ public class RuntimeNavMeshController : SceneController {
 		vertices[COUNT_TO_INDEX_MAP [m_numVerticesAdded]] = cursorPos;
 		m_partialMesh.vertices = vertices;
 
-		Debug.Log ("index = " + m_numVerticesAdded.ToString ());
-		Debug.Log (m_lineRenderer.positionCount);
 		m_lineRenderer.SetPosition (m_numVerticesAdded, cursorPos);
 
 		++m_numVerticesAdded;
