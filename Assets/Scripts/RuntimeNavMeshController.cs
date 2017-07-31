@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.AI;
 
 public class RuntimeNavMeshController : SceneController {
 
@@ -52,6 +53,9 @@ public class RuntimeNavMeshController : SceneController {
 						m_partialMesh.RecalculateBounds ();
 						m_partialQuad.transform.parent = m_quadsHolder;
 
+						// Build the nav mesh when the quad is added.
+						m_partialQuad.GetComponent<NavMeshSurface> ().BuildNavMesh();
+
 						m_partialMesh = null;
 						m_partialQuad = null;
 						m_numVerticesAdded = 0;
@@ -75,7 +79,7 @@ public class RuntimeNavMeshController : SceneController {
 	void InitializePartialMesh (Vector3 pos)
 	{
 		m_partialQuad = Instantiate (m_generatedQuadPrefab);
-		m_partialMesh = m_partialQuad.GetComponent<MeshFilter> ().mesh;
+		m_partialMesh = m_partialQuad.GetComponentInChildren<MeshFilter> ().mesh;
 		m_partialMesh.colors = new Color[4] { m_quadColor, m_quadColor, m_quadColor, m_quadColor };
 		InitMeshVertices (pos);
 
