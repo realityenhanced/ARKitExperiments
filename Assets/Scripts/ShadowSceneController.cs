@@ -26,14 +26,14 @@ public class ShadowSceneController : SceneController {
 		var pos = m_cursorManager.GetCurrentCursorPosition ();
 		var rot = m_cursorManager.GetCurrentCursorRotation ();
 		if (m_actorTransform == null) {
-			m_actorTransform = Utils.SpawnGameObjectAt (m_actorPrefab, pos, rot).transform;
+			m_actorTransform = GameObject.Instantiate (m_actorPrefab, pos, rot).transform;
 		}
 		else {
 			m_actorTransform.position = pos;
 			m_actorTransform.rotation = rot;
 		}
 		if (m_shadowPlaneTransform == null) {
-			m_shadowPlaneTransform = Utils.SpawnGameObjectAt (m_shadowPlanePrefab, pos, rot).transform;
+			m_shadowPlaneTransform = GameObject.Instantiate (m_shadowPlanePrefab, pos, rot).transform;
 		}
 		else {
 			m_shadowPlaneTransform.position = pos;

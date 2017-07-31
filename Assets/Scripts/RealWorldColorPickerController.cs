@@ -38,13 +38,13 @@ public class RealWorldColorPickerController : MonoBehaviour {
 				var rot = m_cursorManager.GetCurrentCursorRotation();
 
 				if (m_actor == null) {
-					m_actor = Utils.SpawnGameObjectAt (m_actorPrefab, pos, rot);
+					m_actor = GameObject.Instantiate (m_actorPrefab, pos, rot);
 					m_materialToUpdate = Utils.FindMaterialOnObject(m_actor, "COLOR BASICO 04");
 					m_actorAnimator = m_actor.GetComponentInChildren<Animator> ();
 				}
 
 				if (m_shadowPlane == null) {
-					m_shadowPlane = Utils.SpawnGameObjectAt(m_shadowPlanePrefab, pos, rot);
+					m_shadowPlane = GameObject.Instantiate (m_shadowPlanePrefab, pos, rot);
 				}
 
 				m_isObjectPlaced = true;

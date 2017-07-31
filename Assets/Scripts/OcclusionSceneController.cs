@@ -43,7 +43,7 @@ public class OcclusionSceneController : ShadowSceneController {
 		var pos = m_cursorManager.GetCurrentCursorPosition ();
 		var rot = m_cursorManager.GetCurrentCursorRotation ();
 		if (m_occlusionPlane == null) {
-			m_occlusionPlane = Utils.SpawnGameObjectAt (m_occlusionPlanePrefab, pos, rot).transform;
+			m_occlusionPlane = GameObject.Instantiate (m_occlusionPlanePrefab, pos, rot).transform;
 		}
 		else {
 			m_occlusionPlane.position = pos;
