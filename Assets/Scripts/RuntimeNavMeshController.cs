@@ -15,6 +15,8 @@ public class RuntimeNavMeshController : SceneController {
 	public GameObject m_menuButtonPrefab;
 	public LineRenderer m_lineRenderer;
 	public GameObject m_actorPrefab;
+	public Material m_scanModeMaterial;
+	public Material m_placeModeMaterial;
 
 	// Privates
 	GameObject m_partialQuad;
@@ -98,7 +100,13 @@ public class RuntimeNavMeshController : SceneController {
 
 	public void OnToggleClicked() {
 		m_isInScanMode = !m_isInScanMode;
-		m_quadsHolder.gameObject.SetActive (m_isInScanMode);
+		m_lineRenderer.enabled = m_isInScanMode;
+
+		var material = m_placeModeMaterial;
+		if (m_isInScanMode) {
+			material = m_scanModeMaterial;		
+		}
+		SetMaterialOnChildren (m_quadsHolder, material);
 
 		UpdateButtonText ();
 	}
@@ -135,5 +143,13 @@ public class RuntimeNavMeshController : SceneController {
 
 	void UpdateButtonText() {
 		m_menuButtonPrefab.GetComponentInChildren<Text> ().text = m_isInScanMode ? SCAN_MODE_TEXT : PLACE_MODE_TEXT;
+	}
+
+	void SetMaterialOnChildren (Transform parent, Material material)
+	{
+		var childMeshRenderers = parent.GetComponentsInChildren<MeshRenderer> ();
+		foreach (var child in childMeshRenderers) {
+			child.material = material;
+		}
 	}
 }
