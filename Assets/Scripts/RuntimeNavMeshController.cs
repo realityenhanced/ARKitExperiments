@@ -27,7 +27,6 @@ public class RuntimeNavMeshController : SceneController {
 	NavMeshAgent m_actorAgent;
 
 	int[] COUNT_TO_INDEX_MAP =  new int[4] {3,1,2,0};
-	Vector3 m_viewPortCenter = new Vector3 (0.5f, 0.5f, 0.0f);
 	const string SCAN_MODE_TEXT = "Toggle [Scan]";
 	const string PLACE_MODE_TEXT = "Toggle [Place]";
 
@@ -39,39 +38,9 @@ public class RuntimeNavMeshController : SceneController {
 	
 	// Update is called once per frame
 	void Update () {
+		Vector3 cursorPos = m_cursorManager.GetCurrentCursorPosition ();
 		if (m_isInScanMode) {
-			
-			Vector3 cursorPos = m_cursorManager.GetCurrentCursorPosition ();
-			if (Utils.WasTouchStartDetected ()) {
-				if (EventSystem.current.IsPointerOverGameObject ()) {
-					// Ignore touch events if a button is pressed
-					return;
-				}
-
-				if (m_numVerticesAdded == 0) {
-					InitializePartialMesh (cursorPos);
-					++m_numVerticesAdded;
-				} else {
-					AddNextVertex (cursorPos);
-
-					if (m_numVerticesAdded == 4) {
-						m_partialMesh.RecalculateBounds ();
-						m_partialQuad.transform.parent = m_quadsHolder;
-
-						// Build the nav mesh when the quad is added.
-						Debug.Log("NavMeshBuilt");
-						m_partialQuad.GetComponent<NavMeshSurface> ().BuildNavMesh ();
-
-						m_partialMesh = null;
-						m_partialQuad = null;
-						m_numVerticesAdded = 0;
-					}
-				}
-			} else {
-				if (m_numVerticesAdded > 0) {
-					m_lineRenderer.SetPosition (m_numVerticesAdded, cursorPos);
-				}
-			}
+			PerformScan (cursorPos);
 		} else {
 			if (Utils.WasTouchStartDetected ()) {
 				if (EventSystem.current.IsPointerOverGameObject ()) {
@@ -79,20 +48,14 @@ public class RuntimeNavMeshController : SceneController {
 					return;
 				}
 
-				RaycastHit hitInfo;
-				Ray ray = Camera.current.ViewportPointToRay (m_viewPortCenter);
-				if (Physics.Raycast (ray, out hitInfo)) {
-					var cursorPos = hitInfo.point;
-					Debug.Log("Name = " + hitInfo.transform.gameObject.name);
-					Debug.Log(System.String.Format("Up Vector of hit : {0} {1} {2}", hitInfo.transform.up.x, hitInfo.transform.up.y, hitInfo.transform.up.z));
-					Debug.Log(System.String.Format("Raycast hit : {0} {1} {2}", cursorPos.x, cursorPos.y, cursorPos.z));
-					if (m_actor == null) {
-						m_actor = GameObject.Instantiate (m_actorPrefab, cursorPos, Quaternion.identity);
-						m_actorAgent = m_actor.GetComponent<NavMeshAgent> ();
-					} else {						
-						m_actorAgent.SetDestination (cursorPos);
-						m_actorAgent.isStopped = false;
-					}
+				if (m_actor == null) {
+					// On the first touch, spawn the actor.
+					m_actor = GameObject.Instantiate (m_actorPrefab, cursorPos, Quaternion.identity);
+					m_actorAgent = m_actor.GetComponent<NavMeshAgent> ();
+				} else {
+					// On subsequent touches, move the dog on the nav mesh.
+					m_actorAgent.SetDestination (cursorPos);
+					m_actorAgent.isStopped = false;
 				}
 			}
 		}
@@ -100,17 +63,15 @@ public class RuntimeNavMeshController : SceneController {
 
 	public void OnToggleClicked() {
 		m_isInScanMode = !m_isInScanMode;
-		m_lineRenderer.enabled = m_isInScanMode;
 
-		var material = m_placeModeMaterial;
-		if (m_isInScanMode) {
-			material = m_scanModeMaterial;		
-		}
-		SetMaterialOnChildren (m_quadsHolder, material);
+		m_lineRenderer.enabled = m_isInScanMode;
+		SetMaterialOnChildren (m_quadsHolder, m_isInScanMode ? m_scanModeMaterial : m_placeModeMaterial);
+		m_cursorManager.SetMode (m_isInScanMode);
 
 		UpdateButtonText ();
 	}
 
+	// Helpers
 	void InitializePartialMesh (Vector3 pos)
 	{
 		m_partialQuad = Instantiate (m_generatedQuadPrefab);
@@ -150,6 +111,44 @@ public class RuntimeNavMeshController : SceneController {
 		var childMeshRenderers = parent.GetComponentsInChildren<MeshRenderer> ();
 		foreach (var child in childMeshRenderers) {
 			child.material = material;
+		}
+	}
+
+	// Adds vertices of a quad on each touch and builds a nav mesh for each quad.
+	void PerformScan (Vector3 cursorPos)
+	{
+		if (Utils.WasTouchStartDetected ()) {
+			if (EventSystem.current.IsPointerOverGameObject ()) {
+				// Ignore touch events if a button is pressed
+				return;
+			}
+			if (m_numVerticesAdded == 0) {
+				InitializePartialMesh (cursorPos);
+				++m_numVerticesAdded;
+			}
+			else {
+				AddNextVertex (cursorPos);
+				if (m_numVerticesAdded == 4) {
+					m_partialMesh.RecalculateBounds ();
+
+					// Update the mesh collider
+					var meshCollider = m_partialQuad.GetComponentInChildren<MeshCollider> ();
+					meshCollider.sharedMesh = m_partialMesh;
+					m_partialQuad.transform.parent = m_quadsHolder;
+
+					// Build the nav mesh when the quad is added.
+					var navMesh = m_partialQuad.GetComponent<NavMeshSurface> ();
+					navMesh.BuildNavMesh ();
+					m_partialMesh = null;
+					m_partialQuad = null;
+					m_numVerticesAdded = 0;
+				}
+			}
+		}
+		else {
+			if (m_numVerticesAdded > 0) {
+				m_lineRenderer.SetPosition (m_numVerticesAdded, cursorPos);
+			}
 		}
 	}
 }

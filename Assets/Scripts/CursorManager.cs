@@ -14,9 +14,11 @@ public class CursorManager : MonoBehaviour {
 	};
 	const ARHitTestResultType m_resultTypeToUse = ARHitTestResultType.ARHitTestResultTypeFeaturePoint;
 	const float m_delta = 0.0005f;
+	Vector3 m_viewPortCenter = new Vector3 (0.5f, 0.5f, 0.0f);
 
 	// Private
 	private Transform m_cursorTransform;
+	private bool m_isInWorldHitTestMode = true;
 
 	// Public Inputs
 	public GameObject m_cursorPrefab;
@@ -29,7 +31,11 @@ public class CursorManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		UpdateTransformUsingWorldHitPoint(m_cursorTransform);
+		if (m_isInWorldHitTestMode) {
+			UpdateTransformUsingWorldHitPoint(m_cursorTransform);
+		} else {
+			UpdateTransformUsingRaycastHitPoint(m_cursorTransform);
+		}
 	}
 
 	public Vector3 GetCurrentCursorPosition()
@@ -50,7 +56,22 @@ public class CursorManager : MonoBehaviour {
 		m_cursorTransform.gameObject.SetActive(false);
 	}
 
+	public void SetMode(bool isInWorldHitTestMode) {
+		m_isInWorldHitTestMode = isInWorldHitTestMode;
+	}
+
 	// Helpers
+	bool UpdateTransformUsingRaycastHitPoint(Transform transformToUpdate) {
+		RaycastHit hitInfo;
+		Ray ray = Camera.current.ViewportPointToRay (m_viewPortCenter);
+		if (Physics.Raycast (ray, out hitInfo)) {
+			transformToUpdate.position = hitInfo.point;
+			return true;
+		}
+
+		return false;
+	}
+
 	bool UpdateTransformUsingWorldHitPoint(Transform transformToUpdate) {
 		Vector3 position = Vector3.zero;
 
