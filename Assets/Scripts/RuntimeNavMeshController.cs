@@ -25,6 +25,7 @@ public class RuntimeNavMeshController : SceneController {
 	bool m_isInScanMode = true;
 	GameObject m_actor;
 	NavMeshAgent m_actorAgent;
+	GameObject m_lastQuadAdded;
 
 	int[] COUNT_TO_INDEX_MAP =  new int[4] {3,1,2,0};
 	const string SCAN_MODE_TEXT = "Toggle [Scan]";
@@ -139,6 +140,12 @@ public class RuntimeNavMeshController : SceneController {
 					// Build the nav mesh when the quad is added.
 					var navMesh = m_partialQuad.GetComponent<NavMeshSurface> ();
 					navMesh.BuildNavMesh ();
+
+					if (m_lastQuadAdded != null) {
+						UpdateNavMeshLink (m_lastQuadAdded, m_partialQuad);
+					}
+
+					m_lastQuadAdded = m_partialQuad;
 					m_partialMesh = null;
 					m_partialQuad = null;
 					m_numVerticesAdded = 0;
@@ -150,5 +157,21 @@ public class RuntimeNavMeshController : SceneController {
 				m_lineRenderer.SetPosition (m_numVerticesAdded, cursorPos);
 			}
 		}
+	}
+
+	void UpdateNavMeshLink(GameObject quad1, GameObject quad2) {
+		NavMeshLink linkOfQuad1 = quad1.GetComponentInChildren<NavMeshLink> ();
+
+		var mesh1 = quad1.GetComponentInChildren<MeshFilter> ().mesh;
+		var mesh2 = quad2.GetComponentInChildren<MeshFilter> ().mesh;
+
+		// ASSUMPTION: Quads are alway drawn top left -> top right -> bottom right -> bottom left
+		var midPointOfFirstEdgeOnQuad1 = mesh1.vertices [0] + (mesh1.vertices [1] - mesh1.vertices [0]) / 2;
+		var midPointOfLastEdgeOnQuad2 = mesh2.vertices [0] + (mesh2.vertices [1] - mesh2.vertices [0]) / 2;
+
+		linkOfQuad1.startPoint = midPointOfFirstEdgeOnQuad1;
+		linkOfQuad1.endPoint = midPointOfLastEdgeOnQuad2;
+
+		linkOfQuad1.UpdateLink ();
 	}
 }
