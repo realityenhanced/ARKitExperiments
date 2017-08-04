@@ -130,11 +130,12 @@ public class RuntimeNavMeshController : SceneController {
 			else {
 				AddNextVertex (cursorPos);
 				if (m_numVerticesAdded == 4) {
-					m_partialMesh.RecalculateBounds ();
+					UpdateUpVectorOfObject (m_partialQuad);
 
 					// Update the mesh collider
 					var meshCollider = m_partialQuad.GetComponentInChildren<MeshCollider> ();
 					meshCollider.sharedMesh = m_partialMesh;
+
 					m_partialQuad.transform.parent = m_quadsHolder;
 
 					// Build the nav mesh when the quad is added.
@@ -166,12 +167,33 @@ public class RuntimeNavMeshController : SceneController {
 		var mesh2 = quad2.GetComponentInChildren<MeshFilter> ().mesh;
 
 		// ASSUMPTION: Quads are alway drawn top left -> top right -> bottom right -> bottom left
-		var midPointOfFirstEdgeOnQuad1 = mesh1.vertices [0] + (mesh1.vertices [1] - mesh1.vertices [0]) / 2;
-		var midPointOfLastEdgeOnQuad2 = mesh2.vertices [0] + (mesh2.vertices [1] - mesh2.vertices [0]) / 2;
+		var midPointOfFirstEdgeOnQuad1 = mesh1.vertices [3] + (mesh1.vertices [1] - mesh1.vertices [3]) / 2;
+		var midPointOfLastEdgeOnQuad2 = mesh2.vertices [0] + (mesh2.vertices [2] - mesh2.vertices [0]) / 2;
 
 		linkOfQuad1.startPoint = midPointOfFirstEdgeOnQuad1;
 		linkOfQuad1.endPoint = midPointOfLastEdgeOnQuad2;
 
 		linkOfQuad1.UpdateLink ();
+	}
+
+	void UpdateUpVectorOfObject(GameObject obj) {
+		var meshObjTransform = obj.transform.GetChild (0);
+		var mesh = meshObjTransform.gameObject.GetComponent<MeshFilter> ().mesh;
+		Vector3[] vertices = mesh.vertices;
+
+		// Use the cross product of the lines formed by three vertices on the quad.
+		var normal = Vector3.Cross((vertices[3] - vertices[1]), (vertices[3] - vertices[2])).normalized;
+		Quaternion tilt = Quaternion.FromToRotation(normal, meshObjTransform.up);
+
+		// Counter the rotation that will be caused by the up vector update below.
+		for (int i=0; i<vertices.GetLength(0); ++i) {
+			vertices [i] = tilt * vertices [i];
+		}
+
+		mesh.vertices = vertices;
+		mesh.RecalculateBounds ();
+		mesh.RecalculateNormals ();
+
+		obj.transform.up = normal;
 	}
 }
