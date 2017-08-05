@@ -57,6 +57,8 @@ public class RuntimeNavMeshController : SceneController {
 					// On subsequent touches, move the dog on the nav mesh.
 					m_actorAgent.SetDestination (cursorPos);
 					m_actorAgent.isStopped = false;
+
+					m_actor.GetComponent<AudioSource> ().Play ();
 				}
 			}
 		}

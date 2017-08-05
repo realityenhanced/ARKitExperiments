@@ -35,3 +35,5 @@ Hippo model from https://www.blendswap.com/blends/view/71760 released under CC-B
 Dragon model from https://www.blendswap.com/blends/view/73418 released under CC-0 by [miklosizoltan](https://www.blendswap.com/user/miklosizoltan)
 
 Dog model from https://www.blendswap.com/blends/view/70126 released under CC-0 by [Lula Borges](https://www.blendswap.com/user/Lula+Borges)
+
+Shitzu Dog Bark sound from https://freesound.org/people/Glitchedtones/sounds/372569/ released under CC-0 by [Glitchedtones](https://freesound.org/people/Glitchedtones/)
