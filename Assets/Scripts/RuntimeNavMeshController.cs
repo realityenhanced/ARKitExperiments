@@ -172,13 +172,19 @@ public class RuntimeNavMeshController : SceneController {
 
 		// ASSUMPTION: Quads are alway drawn top left -> top right -> bottom right -> bottom left
 		var topCenter1 = (mesh1Verts [0] + mesh1Verts [1]) / 2;
-		var center1 = (mesh1Verts [0] + mesh1Verts [2]) / 2;
-		var point1 = (0.85f * topCenter1) + (0.15f * center1);
-
 		var bottomCenter2 = (mesh2Verts[2] + mesh2Verts[3]) / 2;
-		var center2 = (mesh2Verts[0] + mesh2Verts[2]) / 2;
-		var point2 = (bottomCenter2 * 0.85f) + (center2 * 0.15f);
 
+		NavMeshHit hit;
+		var point1 = topCenter1;
+		var point2 = bottomCenter2;
+		if (NavMesh.SamplePosition (topCenter1, out hit, 100.0f, NavMesh.AllAreas)) {
+			point1 = quad1.transform.InverseTransformPoint(hit.position);
+		}
+
+		if (NavMesh.SamplePosition (bottomCenter2, out hit, 100.0f, NavMesh.AllAreas)) {
+			point2 = quad1.transform.InverseTransformPoint(hit.position);
+		}
+			
 		linkOfQuad1.startPoint = point1;
 		linkOfQuad1.endPoint = point2;
 
