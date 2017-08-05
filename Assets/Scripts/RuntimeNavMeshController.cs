@@ -26,8 +26,8 @@ public class RuntimeNavMeshController : SceneController {
 	GameObject m_actor;
 	NavMeshAgent m_actorAgent;
 	GameObject m_lastQuadAdded;
+	List<Vector3[]> m_quadVerticesBeforeTilt = new List<Vector3[]>();
 
-	int[] COUNT_TO_INDEX_MAP =  new int[4] {3,1,2,0};
 	const string SCAN_MODE_TEXT = "Toggle [Scan]";
 	const string PLACE_MODE_TEXT = "Toggle [Place]";
 
@@ -78,6 +78,7 @@ public class RuntimeNavMeshController : SceneController {
 		m_partialQuad = Instantiate (m_generatedQuadPrefab);
 		m_partialMesh = m_partialQuad.GetComponentInChildren<MeshFilter> ().mesh;
 		m_partialMesh.colors = new Color[4] { m_quadColor, m_quadColor, m_quadColor, m_quadColor };
+		m_partialMesh.triangles = new int[6] {0, 1, 2, 0, 2, 3};
 		InitMeshVertices (pos);
 
 		m_lineRenderer.SetPositions (new Vector3[4]{pos,pos,pos,pos});
@@ -86,7 +87,7 @@ public class RuntimeNavMeshController : SceneController {
 	void AddNextVertex (Vector3 cursorPos)
 	{
 		Vector3[] vertices = m_partialMesh.vertices;
-		vertices[COUNT_TO_INDEX_MAP [m_numVerticesAdded]] = cursorPos;
+		vertices[m_numVerticesAdded] = cursorPos;
 		m_partialMesh.vertices = vertices;
 
 		m_lineRenderer.SetPosition (m_numVerticesAdded, cursorPos);
@@ -97,7 +98,7 @@ public class RuntimeNavMeshController : SceneController {
 	void InitMeshVertices (Vector3 pos)
 	{
 		Vector3[] vertices = m_partialMesh.vertices;
-		for (int i = 0; i < 4; ++i) {
+		for (int i = 0; i < vertices.GetLength(0); ++i) {
 			vertices [i] = pos;
 		}
 		m_partialMesh.vertices = vertices;
@@ -115,7 +116,7 @@ public class RuntimeNavMeshController : SceneController {
 		}
 	}
 
-	// Adds vertices of a quad on each touch and builds a nav mesh for each quad.
+	// Adds vertices of a quad on each touch and builds a nav mesh for each quad that was created.
 	void PerformScan (Vector3 cursorPos)
 	{
 		if (Utils.WasTouchStartDetected ()) {
@@ -123,6 +124,7 @@ public class RuntimeNavMeshController : SceneController {
 				// Ignore touch events if a button is pressed
 				return;
 			}
+
 			if (m_numVerticesAdded == 0) {
 				InitializePartialMesh (cursorPos);
 				++m_numVerticesAdded;
@@ -161,24 +163,34 @@ public class RuntimeNavMeshController : SceneController {
 	}
 
 	void UpdateNavMeshLink(GameObject quad1, GameObject quad2) {
-		NavMeshLink linkOfQuad1 = quad1.GetComponentInChildren<NavMeshLink> ();
+		NavMeshLink linkOfQuad1 = quad1.GetComponent<NavMeshLink> ();
 
-		var mesh1 = quad1.GetComponentInChildren<MeshFilter> ().mesh;
-		var mesh2 = quad2.GetComponentInChildren<MeshFilter> ().mesh;
+		var mesh1Verts = m_quadVerticesBeforeTilt [m_quadVerticesBeforeTilt.Count - 2];
+		var mesh2Verts = m_quadVerticesBeforeTilt [m_quadVerticesBeforeTilt.Count - 1];
 
 		// ASSUMPTION: Quads are alway drawn top left -> top right -> bottom right -> bottom left
-		var midPointOfFirstEdgeOnQuad1 = mesh1.vertices [3] + (mesh1.vertices [1] - mesh1.vertices [3]) / 2;
-		var midPointOfLastEdgeOnQuad2 = mesh2.vertices [0] + (mesh2.vertices [2] - mesh2.vertices [0]) / 2;
+		var topCenter1 = (mesh1Verts [0] + mesh1Verts [1]) / 2;
+		var center1 = (mesh1Verts [0] + mesh1Verts [2]) / 2;
+		var point1 = (0.85f * topCenter1) + (0.15f * center1);
 
-		linkOfQuad1.startPoint = midPointOfFirstEdgeOnQuad1;
-		linkOfQuad1.endPoint = midPointOfLastEdgeOnQuad2;
+		var bottomCenter2 = (mesh2Verts[2] + mesh2Verts[3]) / 2;
+		var center2 = (mesh2Verts[0] + mesh2Verts[2]) / 2;
+		var point2 = (bottomCenter2 * 0.85f) + (center2 * 0.15f);
 
+		linkOfQuad1.startPoint = point1;
+		linkOfQuad1.endPoint = point2;
+
+		linkOfQuad1.width = (mesh1Verts [1] - mesh1Verts [0]).magnitude;
 		linkOfQuad1.UpdateLink ();
 	}
 
 	void UpdateUpVectorOfObject(GameObject obj) {
 		var meshObjTransform = obj.transform.GetChild (0);
 		var mesh = meshObjTransform.gameObject.GetComponent<MeshFilter> ().mesh;
+
+		Vector3[] oldVertices = mesh.vertices;
+		m_quadVerticesBeforeTilt.Add(oldVertices);
+
 		Vector3[] vertices = mesh.vertices;
 
 		// Use the cross product of the lines formed by three vertices on the quad.
