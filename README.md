@@ -9,6 +9,8 @@ Occlusion experiment video @ https://youtu.be/MK3D91kCKzM
 
 Point cloud experiment video @ https://youtu.be/kupq1C41XcU
 
+Runtime NavMesh video @ https://youtu.be/7sG2VOsUDPQ
+
 # Software Versions used
 #### Unity: 5.6.2p4
 #### XCode: XCode 9 Beta 4
@@ -33,3 +35,7 @@ Rooster model from https://www.blendswap.com/blends/view/80230 released under CC
 Hippo model from https://www.blendswap.com/blends/view/71760 released under CC-BY license by [WIRLOW](https://www.blendswap.com/user/WIRLOW)
 
 Dragon model from https://www.blendswap.com/blends/view/73418 released under CC-0 by [miklosizoltan](https://www.blendswap.com/user/miklosizoltan)
+
+Dog model from https://www.blendswap.com/blends/view/70126 released under CC-0 by [Lula Borges](https://www.blendswap.com/user/Lula+Borges)
+
+Shitzu Dog Bark sound from https://freesound.org/people/Glitchedtones/sounds/372569/ released under CC-0 by [Glitchedtones](https://freesound.org/people/Glitchedtones/)

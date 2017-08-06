@@ -11,15 +11,6 @@ public class Utils
 		return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Began;
 	}
 
-	static public GameObject SpawnGameObjectAt(GameObject prefab, Vector3 pos, Quaternion rot)
-	{
-		var actor = GameObject.Instantiate (prefab);	
-		actor.transform.position = pos;
-		actor.transform.rotation = rot;
-
-		return actor;
-	}
-
 	static public ARHitTestResult GetFirstValidHit(List<ARHitTestResult> hitResults)
 	{
 		ARHitTestResult hitResult = hitResults[0]; // Return the first hit, if no valid hits were found.
