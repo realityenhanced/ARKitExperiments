@@ -17,6 +17,7 @@ public class RuntimeNavMeshController : SceneController {
 	public GameObject m_actorPrefab;
 	public Material m_scanModeMaterial;
 	public Material m_placeModeMaterial;
+	public GameObject m_navMeshLinkPrefab;
 
 	// Privates
 	GameObject m_partialQuad;
@@ -187,6 +188,16 @@ public class RuntimeNavMeshController : SceneController {
 			
 		linkOfQuad1.startPoint = point1;
 		linkOfQuad1.endPoint = point2;
+
+		// Visualize link
+		var linkObj1 = Instantiate (m_navMeshLinkPrefab, Vector3.zero, Quaternion.identity);
+		linkObj1.transform.parent = quad1.transform;
+		linkObj1.transform.localPosition = point1;
+
+		var linkObj2 = Instantiate (m_navMeshLinkPrefab, Vector3.zero, Quaternion.identity);
+		linkObj2.transform.parent = quad1.transform;
+		linkObj2.transform.localPosition = point2;
+		//
 
 		linkOfQuad1.width = (mesh1Verts [1] - mesh1Verts [0]).magnitude;
 		linkOfQuad1.UpdateLink ();
