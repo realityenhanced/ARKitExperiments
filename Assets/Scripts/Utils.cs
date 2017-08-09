@@ -128,4 +128,12 @@ public class Utils
 			file.Delete(); 
 		}
 	}
+
+	public static void SetMaterialOnChildren (Transform parent, Material material)
+	{
+		var childMeshRenderers = parent.GetComponentsInChildren<MeshRenderer> ();
+		foreach (var child in childMeshRenderers) {
+			child.material = material;
+		}
+	}
 }
