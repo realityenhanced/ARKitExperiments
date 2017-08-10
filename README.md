@@ -13,8 +13,8 @@ Runtime NavMesh video @ https://youtu.be/7sG2VOsUDPQ
 
 # Software Versions used
 #### Unity: 5.6.2p4
-#### XCode: XCode 9 Beta 4
-#### Unity ARKit Plugin: version 1.0.5
+#### XCode: XCode 9 Beta 5
+#### Unity ARKit Plugin: version 1.0.7
 
 # Helpful Resources
 ## How to set up Unity for ARKit?
