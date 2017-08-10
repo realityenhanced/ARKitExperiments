@@ -12,7 +12,7 @@ public class RuntimeNavMeshController : SceneController {
 	public CursorManager m_cursorManager;
 	public Color m_quadColor = Color.blue;
 	public Transform m_quadsHolder;
-	public GameObject m_menuButtonPrefab;
+	public GameObject m_menuButton;
 	public LineRenderer m_lineRenderer;
 	public GameObject m_actorPrefab;
 	public Material m_scanModeMaterial;
@@ -108,7 +108,7 @@ public class RuntimeNavMeshController : SceneController {
 	}
 
 	void UpdateButtonText() {
-		m_menuButtonPrefab.GetComponentInChildren<Text> ().text = m_isInScanMode ? SCAN_MODE_TEXT : PLACE_MODE_TEXT;
+		m_menuButton.GetComponentInChildren<Text> ().text = m_isInScanMode ? SCAN_MODE_TEXT : PLACE_MODE_TEXT;
 	}
 
 	// Adds vertices of a quad on each touch and builds a nav mesh for each quad that was created.

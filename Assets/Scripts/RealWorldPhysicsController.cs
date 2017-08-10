@@ -13,7 +13,7 @@ public class RealWorldPhysicsController : SceneController {
 	public CursorManager m_cursorManager;
 	public Color m_quadColor = Color.blue;
 	public Transform m_quadsHolder;
-	public GameObject m_menuButtonPrefab;
+	public GameObject m_menuButton;
 	public LineRenderer m_lineRenderer;
 	public GameObject m_actorPrefab;
 	public Material m_scanModeMaterial;
@@ -47,12 +47,7 @@ public class RealWorldPhysicsController : SceneController {
 					return;
 				}
 
-				if (m_actor == null) {
-					// On the first touch, spawn the actor.
-					m_actor = GameObject.Instantiate (m_actorPrefab, cursorPos, Quaternion.identity);
-				} else {
-					// TODO: 
-				}
+				GameObject.Instantiate (m_actorPrefab, cursorPos, Quaternion.identity);
 			}
 		}
 	}
@@ -71,7 +66,7 @@ public class RealWorldPhysicsController : SceneController {
 	void InitializePartialMesh (Vector3 pos)
 	{
 		m_partialQuad = Instantiate (m_generatedQuadPrefab);
-		m_partialMesh = m_partialQuad.GetComponentInChildren<MeshFilter> ().mesh;
+		m_partialMesh = m_partialQuad.GetComponent<MeshFilter> ().mesh;
 		m_partialMesh.colors = new Color[4] { m_quadColor, m_quadColor, m_quadColor, m_quadColor };
 		m_partialMesh.triangles = new int[6] {0, 1, 2, 0, 2, 3};
 		InitMeshVertices (pos);
@@ -100,7 +95,7 @@ public class RealWorldPhysicsController : SceneController {
 	}
 
 	void UpdateButtonText() {
-		m_menuButtonPrefab.GetComponentInChildren<Text> ().text = m_isInScanMode ? SCAN_MODE_TEXT : PLACE_MODE_TEXT;
+		m_menuButton.GetComponentInChildren<Text> ().text = m_isInScanMode ? SCAN_MODE_TEXT : PLACE_MODE_TEXT;
 	}
 
 	// Adds vertices of a quad on each touch and builds a nav mesh for each quad that was created.
@@ -120,7 +115,7 @@ public class RealWorldPhysicsController : SceneController {
 				AddNextVertex (cursorPos);
 				if (m_numVerticesAdded == 4) {
 					// Update the mesh collider
-					var meshCollider = m_partialQuad.GetComponentInChildren<MeshCollider> ();
+					var meshCollider = m_partialQuad.GetComponent<MeshCollider> ();
 					meshCollider.sharedMesh = m_partialMesh;
 
 					m_partialQuad.transform.parent = m_quadsHolder;
