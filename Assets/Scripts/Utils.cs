@@ -142,4 +142,11 @@ public class Utils
 			child.material = material;
 		}
 	}
+
+	public static void SetChildrenAsKinematic (GameObject parent, bool shouldEnableKinematic) {
+		var childRigidBodies = parent.GetComponentsInChildren<Rigidbody> ();
+		foreach (var child in childRigidBodies) {
+			child.isKinematic = shouldEnableKinematic;
+		}
+	}
 }
