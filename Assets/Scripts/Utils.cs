@@ -3,12 +3,18 @@ using UnityEngine;
 using UnityEngine.XR.iOS;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine.EventSystems;
 
 public class Utils
 {
 	static public bool WasTouchStartDetected()
 	{
 		return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Began;
+	}
+
+	static public bool IsTouchOnUI()
+	{
+		return Input.touchCount == 1 && EventSystem.current.IsPointerOverGameObject (Input.GetTouch(0).fingerId);
 	}
 
 	static public ARHitTestResult GetFirstValidHit(List<ARHitTestResult> hitResults)

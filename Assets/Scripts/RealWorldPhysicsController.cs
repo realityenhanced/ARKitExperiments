@@ -37,16 +37,16 @@ public class RealWorldPhysicsController : SceneController {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Utils.IsTouchOnUI()) {
+			// Ignore touch events if a button is pressed
+			return;
+		}
+
 		Vector3 cursorPos = m_cursorManager.GetCurrentCursorPosition ();
 		if (m_isInScanMode) {
 			PerformScan (cursorPos);
 		} else {
 			if (Utils.WasTouchStartDetected ()) {
-				if (EventSystem.current.IsPointerOverGameObject ()) {
-					// Ignore touch events if a button is pressed
-					return;
-				}
-
 				GameObject.Instantiate (m_actorPrefab, cursorPos, Quaternion.identity);
 			}
 		}
@@ -102,11 +102,6 @@ public class RealWorldPhysicsController : SceneController {
 	void PerformScan (Vector3 cursorPos)
 	{
 		if (Utils.WasTouchStartDetected ()) {
-			if (EventSystem.current.IsPointerOverGameObject ()) {
-				// Ignore touch events if a button is pressed
-				return;
-			}
-
 			if (m_numVerticesAdded == 0) {
 				InitializePartialMesh (cursorPos);
 				++m_numVerticesAdded;
