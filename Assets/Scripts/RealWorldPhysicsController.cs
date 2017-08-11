@@ -16,6 +16,7 @@ public class RealWorldPhysicsController : SceneController {
 	public GameObject m_menuButton;
 	public LineRenderer m_lineRenderer;
 	public GameObject m_actorPrefab;
+	public GameObject m_ballPrefab;
 	public Material m_scanModeMaterial;
 	public Material m_placeModeMaterial;
 
@@ -24,7 +25,7 @@ public class RealWorldPhysicsController : SceneController {
 	Mesh m_partialMesh;
 	int m_numVerticesAdded = 0;
 	bool m_isInScanMode = true;
-	GameObject m_actor;
+	bool m_wasTowerPlaced = false;
 
 	const string SCAN_MODE_TEXT = "Toggle [Scan]";
 	const string PLACE_MODE_TEXT = "Toggle [Place]";
@@ -47,7 +48,14 @@ public class RealWorldPhysicsController : SceneController {
 			PerformScan (cursorPos);
 		} else {
 			if (Utils.WasTouchStartDetected ()) {
-				GameObject.Instantiate (m_actorPrefab, cursorPos, Quaternion.identity);
+				if (!m_wasTowerPlaced) {
+					// TODO: Rotate object to face camera.
+					GameObject.Instantiate (m_actorPrefab, cursorPos, Quaternion.identity);
+					m_wasTowerPlaced = true;
+				} else {
+					var ball = GameObject.Instantiate (m_ballPrefab, Camera.current.transform.position, Quaternion.identity);
+					ball.GetComponentInChildren<Rigidbody> ().AddForce (Camera.current.transform.forward * 200.0f);
+				}
 			}
 		}
 	}
