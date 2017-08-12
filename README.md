@@ -11,6 +11,8 @@ Point cloud experiment video @ https://youtu.be/kupq1C41XcU
 
 Runtime NavMesh video @ https://youtu.be/7sG2VOsUDPQ
 
+Physics Experiment video @ https://youtu.be/FZoUUAR6TkQ
+
 # Software Versions used
 #### Unity: 5.6.2p4
 #### XCode: XCode 9 Beta 5
