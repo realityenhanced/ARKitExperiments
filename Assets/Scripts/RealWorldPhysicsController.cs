@@ -50,10 +50,10 @@ public class RealWorldPhysicsController : SceneController {
 			if (Utils.WasTouchStartDetected ()) {
 				var cameraTransform = Camera.current.transform;
 				if (m_tower == null) {
-					m_tower = GameObject.Instantiate (m_towerPrefab, cursorPos, Quaternion.Euler(0, 90.0f + cameraTransform.rotation.eulerAngles.y, 0));
+					m_tower = GameObject.Instantiate (m_towerPrefab, cursorPos, Quaternion.Euler(0, -cameraTransform.rotation.eulerAngles.y, 0));
 				} else {
 					var ball = GameObject.Instantiate (m_ballPrefab, cameraTransform.position, Quaternion.identity);
-					ball.GetComponentInChildren<Rigidbody> ().AddForce (cameraTransform.forward * 200.0f);
+					ball.GetComponentInChildren<Rigidbody> ().AddForce (cameraTransform.forward * 2000.0f);
 				}
 			}
 		}

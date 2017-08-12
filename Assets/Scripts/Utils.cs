@@ -80,17 +80,19 @@ public class Utils
 		return materialInstance;
 	}
 
-	public static float GetWorldSpaceHeight(GameObject go) {
-		float height = 0.0f;
+	public static Vector3 GetWorldSpaceSize(GameObject go) {
+		Vector3 size = Vector3.zero;
 
 		var boxCollider = go.GetComponent<BoxCollider> ();
 		if (boxCollider) {
-			height = boxCollider.bounds.extents.y * 2;
+			size.x = boxCollider.bounds.extents.x * 2;
+			size.y = boxCollider.bounds.extents.y * 2;
+			size.z = boxCollider.bounds.extents.z * 2;
 		} else {
-			Debug.LogError ("GetWorldSpaceHeight: GameObject doesnt have a Box Collider set.");
+			Debug.LogError ("GetWorldSpaceSize: GameObject doesnt have a Box Collider set.");
 		}
 
-		return height;
+		return size;
 	}
 
 	public static void SavePointCloudToPlyFile(List<Vector3> pointCloud, List<Color> pointColors, string fileName) {

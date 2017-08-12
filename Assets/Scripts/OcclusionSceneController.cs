@@ -23,7 +23,7 @@ public class OcclusionSceneController : ShadowSceneController {
 	}
 
 	IEnumerator MoveActorUp(float durationInSeconds) {
-		var actorHeight = Utils.GetWorldSpaceHeight (m_actorTransform.gameObject);
+		var actorHeight = Utils.GetWorldSpaceSize (m_actorTransform.gameObject).y;
 		m_actorTransform.position = new Vector3(m_actorTransform.position.x, m_actorTransform.position.y - actorHeight, m_actorTransform.position.z);
 
 		const float updatesPerSecond = 30.0f;
