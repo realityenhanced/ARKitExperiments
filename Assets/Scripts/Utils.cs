@@ -3,12 +3,18 @@ using UnityEngine;
 using UnityEngine.XR.iOS;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine.EventSystems;
 
 public class Utils
 {
 	static public bool WasTouchStartDetected()
 	{
 		return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Began;
+	}
+
+	static public bool IsTouchOnUI()
+	{
+		return Input.touchCount == 1 && EventSystem.current.IsPointerOverGameObject (Input.GetTouch(0).fingerId);
 	}
 
 	static public ARHitTestResult GetFirstValidHit(List<ARHitTestResult> hitResults)
@@ -74,17 +80,19 @@ public class Utils
 		return materialInstance;
 	}
 
-	public static float GetWorldSpaceHeight(GameObject go) {
-		float height = 0.0f;
+	public static Vector3 GetWorldSpaceSize(GameObject go) {
+		Vector3 size = Vector3.zero;
 
 		var boxCollider = go.GetComponent<BoxCollider> ();
 		if (boxCollider) {
-			height = boxCollider.bounds.extents.y * 2;
+			size.x = boxCollider.bounds.extents.x * 2;
+			size.y = boxCollider.bounds.extents.y * 2;
+			size.z = boxCollider.bounds.extents.z * 2;
 		} else {
-			Debug.LogError ("GetWorldSpaceHeight: GameObject doesnt have a Box Collider set.");
+			Debug.LogError ("GetWorldSpaceSize: GameObject doesnt have a Box Collider set.");
 		}
 
-		return height;
+		return size;
 	}
 
 	public static void SavePointCloudToPlyFile(List<Vector3> pointCloud, List<Color> pointColors, string fileName) {
@@ -126,6 +134,21 @@ public class Utils
 		foreach (FileInfo file in di.GetFiles())
 		{
 			file.Delete(); 
+		}
+	}
+
+	public static void SetMaterialOnChildren (Transform parent, Material material)
+	{
+		var childMeshRenderers = parent.GetComponentsInChildren<MeshRenderer> ();
+		foreach (var child in childMeshRenderers) {
+			child.material = material;
+		}
+	}
+
+	public static void SetChildrenAsKinematic (GameObject parent, bool shouldEnableKinematic) {
+		var childRigidBodies = parent.GetComponentsInChildren<Rigidbody> ();
+		foreach (var child in childRigidBodies) {
+			child.isKinematic = shouldEnableKinematic;
 		}
 	}
 }

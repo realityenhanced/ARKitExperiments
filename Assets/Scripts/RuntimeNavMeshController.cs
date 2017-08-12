@@ -12,7 +12,7 @@ public class RuntimeNavMeshController : SceneController {
 	public CursorManager m_cursorManager;
 	public Color m_quadColor = Color.blue;
 	public Transform m_quadsHolder;
-	public GameObject m_menuButtonPrefab;
+	public GameObject m_menuButton;
 	public LineRenderer m_lineRenderer;
 	public GameObject m_actorPrefab;
 	public Material m_scanModeMaterial;
@@ -40,16 +40,16 @@ public class RuntimeNavMeshController : SceneController {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Utils.IsTouchOnUI()) {
+			// Ignore touch events if a button is pressed
+			return;
+		}
+
 		Vector3 cursorPos = m_cursorManager.GetCurrentCursorPosition ();
 		if (m_isInScanMode) {
 			PerformScan (cursorPos);
 		} else {
 			if (Utils.WasTouchStartDetected ()) {
-				if (EventSystem.current.IsPointerOverGameObject ()) {
-					// Ignore touch events if a button is pressed
-					return;
-				}
-
 				if (m_actor == null) {
 					// On the first touch, spawn the actor.
 					m_actor = GameObject.Instantiate (m_actorPrefab, cursorPos, Quaternion.identity);
@@ -69,7 +69,7 @@ public class RuntimeNavMeshController : SceneController {
 		m_isInScanMode = !m_isInScanMode;
 
 		m_lineRenderer.enabled = m_isInScanMode;
-		SetMaterialOnChildren (m_quadsHolder, m_isInScanMode ? m_scanModeMaterial : m_placeModeMaterial);
+		Utils.SetMaterialOnChildren (m_quadsHolder, m_isInScanMode ? m_scanModeMaterial : m_placeModeMaterial);
 		m_cursorManager.SetMode (m_isInScanMode);
 
 		UpdateButtonText ();
@@ -108,26 +108,13 @@ public class RuntimeNavMeshController : SceneController {
 	}
 
 	void UpdateButtonText() {
-		m_menuButtonPrefab.GetComponentInChildren<Text> ().text = m_isInScanMode ? SCAN_MODE_TEXT : PLACE_MODE_TEXT;
-	}
-
-	void SetMaterialOnChildren (Transform parent, Material material)
-	{
-		var childMeshRenderers = parent.GetComponentsInChildren<MeshRenderer> ();
-		foreach (var child in childMeshRenderers) {
-			child.material = material;
-		}
+		m_menuButton.GetComponentInChildren<Text> ().text = m_isInScanMode ? SCAN_MODE_TEXT : PLACE_MODE_TEXT;
 	}
 
 	// Adds vertices of a quad on each touch and builds a nav mesh for each quad that was created.
 	void PerformScan (Vector3 cursorPos)
 	{
 		if (Utils.WasTouchStartDetected ()) {
-			if (EventSystem.current.IsPointerOverGameObject ()) {
-				// Ignore touch events if a button is pressed
-				return;
-			}
-
 			if (m_numVerticesAdded == 0) {
 				InitializePartialMesh (cursorPos);
 				++m_numVerticesAdded;

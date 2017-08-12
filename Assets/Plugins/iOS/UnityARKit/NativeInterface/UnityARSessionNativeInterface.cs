@@ -41,6 +41,7 @@ namespace UnityEngine.XR.iOS {
         public ARTrackingState trackingState;
         public ARTrackingStateReason trackingReason;
 		public UnityVideoParams videoParams;
+		public float ambientIntensity;
         public uint getPointCloudData;
     };
 
@@ -51,15 +52,17 @@ namespace UnityEngine.XR.iOS {
         public ARTrackingState trackingState;
         public ARTrackingStateReason trackingReason;
 		public UnityVideoParams videoParams;
+		public float ambientIntensity;
         public Vector3[] pointCloudData;
 
-		public UnityARCamera(UnityARMatrix4x4 wt, UnityARMatrix4x4 pm, ARTrackingState ats, ARTrackingStateReason atsr, UnityVideoParams uvp, Vector3[] pointCloud)
+		public UnityARCamera(UnityARMatrix4x4 wt, UnityARMatrix4x4 pm, ARTrackingState ats, ARTrackingStateReason atsr, UnityVideoParams uvp, float lightEst, Vector3[] pointCloud)
 		{
 			worldTransform = wt;
 			projectionMatrix = pm;
 			trackingState = ats;
 			trackingReason = atsr;
 			videoParams = uvp;
+			ambientIntensity = lightEst;
 			pointCloudData = pointCloud;
 		}
     };
@@ -455,6 +458,7 @@ namespace UnityEngine.XR.iOS {
             pubCamera.trackingState = camera.trackingState;
             pubCamera.trackingReason = camera.trackingReason;
 			pubCamera.videoParams = camera.videoParams;
+			pubCamera.ambientIntensity = camera.ambientIntensity;
             s_Camera = pubCamera;
 
             if (camera.getPointCloudData == 1)
@@ -708,17 +712,19 @@ namespace UnityEngine.XR.iOS {
 			return GetVideoTextureHandles ();
 		}
 
+		[Obsolete("Hook ARFrameUpdatedEvent instead and get UnityARCamera.ambientIntensity")]
 		public float GetARAmbientIntensity()
 		{
 			return GetAmbientIntensity ();
 		}
 
+		[Obsolete("Hook ARFrameUpdatedEvent instead and get UnityARCamera.trackingState")]
 		public int GetARTrackingQuality()
 		{
 			return GetTrackingQuality();
 		}
         
-		//deprecated
+		[Obsolete("Hook ARFrameUpdatedEvent instead and get UnityARCamera.videoParams.texCoordScale")]
         public float GetARYUVTexCoordScale()
         {
             return GetYUVTexCoordScale();
