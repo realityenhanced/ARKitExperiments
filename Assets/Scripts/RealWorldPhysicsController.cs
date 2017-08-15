@@ -48,7 +48,7 @@ public class RealWorldPhysicsController : SceneController {
 			PerformScan (cursorPos);
 		} else {
 			if (Utils.WasTouchStartDetected ()) {
-				var cameraTransform = Camera.current.transform;
+				var cameraTransform = Camera.main.transform;
 				if (m_tower == null) {
 					m_tower = GameObject.Instantiate (m_towerPrefab, cursorPos, Quaternion.Euler(0, 90.0f + cameraTransform.rotation.eulerAngles.y, 0));
 				} else {
