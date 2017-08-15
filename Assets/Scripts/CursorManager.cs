@@ -23,18 +23,30 @@ public class CursorManager : MonoBehaviour {
 	// Public Inputs
 	public GameObject m_cursorPrefab;
 	public bool m_useAverageOfNeighbors = false;
+    public GameObject m_editorWorldForDebugging;
+    public int m_editorWorldRaycastLayer = 8;
 
 	// Use this for initialization
 	void Start () {
 		m_cursorTransform = Instantiate(m_cursorPrefab).transform;
-	}
+
+#if UNITY_EDITOR
+        // For editor support, use a dummy world to hit test against.
+        Instantiate(m_editorWorldForDebugging);
+#endif
+    }
 	
 	// Update is called once per frame
 	void Update () {
 		if (m_isInWorldHitTestMode) {
-			UpdateTransformUsingWorldHitPoint(m_cursorTransform);
-		} else {
-			UpdateTransformUsingRaycastHitPoint(m_cursorTransform);
+#if UNITY_EDITOR
+            // Raycast onto the editor world prefab object, instead of the real world.
+            UpdateTransformUsingRaycastHitPoint(m_cursorTransform, 1 << m_editorWorldRaycastLayer);
+#else
+            UpdateTransformUsingWorldHitPoint(m_cursorTransform);
+#endif
+        } else {
+			UpdateTransformUsingRaycastHitPoint(m_cursorTransform, Physics.DefaultRaycastLayers);
 		}
 	}
 
@@ -61,10 +73,10 @@ public class CursorManager : MonoBehaviour {
 	}
 
 	// Helpers
-	bool UpdateTransformUsingRaycastHitPoint(Transform transformToUpdate) {
+	bool UpdateTransformUsingRaycastHitPoint(Transform transformToUpdate, int layerMask) {
 		RaycastHit hitInfo;
-		Ray ray = Camera.current.ViewportPointToRay (m_viewPortCenter);
-		if (Physics.Raycast (ray, out hitInfo)) {
+		Ray ray = Camera.main.ViewportPointToRay (m_viewPortCenter);
+		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity, layerMask)) {
 			transformToUpdate.position = hitInfo.point;
 			return true;
 		}
