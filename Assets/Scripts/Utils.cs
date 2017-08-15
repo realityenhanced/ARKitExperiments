@@ -9,15 +9,23 @@ public class Utils
 {
 	static public bool WasTouchStartDetected()
 	{
-		return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Began;
-	}
+#if UNITY_EDITOR
+        return Input.GetKeyDown(KeyCode.Space);
+#else
+        return Input.touchCount == 1 && Input.GetTouch (0).phase == TouchPhase.Began;
+#endif
+    }
 
-	static public bool IsTouchOnUI()
+    static public bool IsTouchOnUI()
 	{
-		return Input.touchCount == 1 && EventSystem.current.IsPointerOverGameObject (Input.GetTouch(0).fingerId);
-	}
+#if UNITY_EDITOR
+        return EventSystem.current.IsPointerOverGameObject();
+#else
+        return Input.touchCount == 1 && EventSystem.current.IsPointerOverGameObject (Input.GetTouch(0).fingerId);
+#endif
+    }
 
-	static public ARHitTestResult GetFirstValidHit(List<ARHitTestResult> hitResults)
+    static public ARHitTestResult GetFirstValidHit(List<ARHitTestResult> hitResults)
 	{
 		ARHitTestResult hitResult = hitResults[0]; // Return the first hit, if no valid hits were found.
 		foreach (var h in hitResults) {
