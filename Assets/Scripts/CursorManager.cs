@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.iOS;
@@ -22,6 +22,7 @@ public class CursorManager : MonoBehaviour {
 
 	// Public Inputs
 	public GameObject m_cursorPrefab;
+        public Camera m_camera;
 	public bool m_useAverageOfNeighbors = false;
     public GameObject m_editorWorldForDebugging;
     public int m_editorWorldRaycastLayer = 8;
@@ -75,7 +76,7 @@ public class CursorManager : MonoBehaviour {
 	// Helpers
 	bool UpdateTransformUsingRaycastHitPoint(Transform transformToUpdate, int layerMask) {
 		RaycastHit hitInfo;
-		Ray ray = Camera.main.ViewportPointToRay (m_viewPortCenter);
+		Ray ray = m_camera.ViewportPointToRay (m_viewPortCenter);
 		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity, layerMask)) {
 			transformToUpdate.position = hitInfo.point;
 			return true;
