@@ -1,3 +1,7 @@
+# Ignore OpenCV framework package
+Assets/Plugins/iOS/OpencvProcessing/opencv2.framework
+opencvprocessing/opencv2.framework/
+
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -41,3 +45,6 @@ Assets/Plugins/GoogleCastRemoteDisplay.meta
 Assets/Plugins/GoogleCastRemoteDisplay/
 Assets/Plugins/iOS/GoogleCastRemoteDisplay.meta
 Assets/Plugins/iOS/GoogleCastRemoteDisplay/
+*.xcuserstate
+*.plist
+*.xcworkspacedata
