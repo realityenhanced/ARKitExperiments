@@ -24,7 +24,15 @@ int main(int argc, char** argv)
             imshow("Display window", image);
             waitKey(0);
 
-            cout << PerformOperation(image.ptr(), image.cols, image.rows) << endl;
+            if (image.type() != CV_8UC3)
+            {
+                printf("Invalid mat");
+                retVal = -1;
+            }
+            else
+            {
+                cout << PerformOperation(image.ptr(), image.cols, image.rows) << endl;
+            }
         }
     }
     else
