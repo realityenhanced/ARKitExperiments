@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		191B03F91F566B4700232991 /* opencv2.framework in Headers */ = {isa = PBXBuildFile; fileRef = 191B03F81F566B2800232991 /* opencv2.framework */; };
 		191B03FA1F566B4C00232991 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 191B03F81F566B2800232991 /* opencv2.framework */; };
-		196A22EF1F566C6300544294 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 196A22ED1F566C6300544294 /* main.cpp */; };
+		196A22EF1F566C6300544294 /* operation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 196A22ED1F566C6300544294 /* operation.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		191B03F81F566B2800232991 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
-		196A22ED1F566C6300544294 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		196A22ED1F566C6300544294 /* operation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = operation.cpp; sourceTree = "<group>"; };
 		19CC0F271F566A92006812D8 /* libopencvprocessing.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libopencvprocessing.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -34,7 +34,7 @@
 			isa = PBXGroup;
 			children = (
 				191B03F81F566B2800232991 /* opencv2.framework */,
-				196A22ED1F566C6300544294 /* main.cpp */,
+				196A22ED1F566C6300544294 /* operation.cpp */,
 				19CC0F281F566A92006812D8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -131,7 +131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				196A22EF1F566C6300544294 /* main.cpp in Sources */,
+				196A22EF1F566C6300544294 /* operation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
