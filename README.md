@@ -18,7 +18,7 @@ Physics Experiment video @ https://youtu.be/FZoUUAR6TkQ
 #### XCode: XCode 9 Beta 5
 #### Unity ARKit Plugin: version 1.0.7
 #### OpenCV 3.3.0
-(NOTE: Manually copy OpenCV iOS pack from http://opencv.org/releases.html to the following  folders: Assets/Plugins/iOS/OpenCVProcessing & opencvprocessing/)
+(NOTE: Manually copy OpenCV iOS pack from http://opencv.org/releases.html to the following  folders: Assets/Plugins/iOS/OpenCVProcessing & NativePluginCode/opencvprocessing/)
 
 # Helpful Resources
 ## How to set up Unity for ARKit?

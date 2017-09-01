@@ -122,7 +122,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp ${TARGET_BUILD_DIR}/lib${TARGET_NAME}.a ${PROJECT_DIR}/../Assets/Plugins/ios/opencvprocessing/lib${TARGET_NAME}.a";
+			shellScript = "cp ${TARGET_BUILD_DIR}/lib${TARGET_NAME}.a ${PROJECT_DIR}/../../Assets/Plugins/ios/opencvprocessing/lib${TARGET_NAME}.a";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -1,6 +1,6 @@
 # Ignore OpenCV framework package
 Assets/Plugins/iOS/OpencvProcessing/opencv2.framework
-opencvprocessing/opencv2.framework/
+NativePluginCode/opencvprocessing/opencv2.framework/
 
 /[Ll]ibrary/
 /[Tt]emp/
