@@ -12,7 +12,6 @@ extern "C"
 
 #ifdef _CONSOLE
     void DebugDisplayImage(Mat& mat) {
-        namedWindow("Display window", WINDOW_NORMAL);
         imshow("Display window", mat);
         waitKey(0);
     }

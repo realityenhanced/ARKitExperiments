@@ -20,7 +20,7 @@ int main(int argc, char** argv)
         }
         else
         {
-            namedWindow("Display window", WINDOW_NORMAL);
+            namedWindow("Display window", WINDOW_KEEPRATIO);
             imshow("Display window", image);
             waitKey(0);
 
