@@ -20,9 +20,9 @@ int main(int argc, char** argv)
         }
         else
         {
-            namedWindow("Display window", WINDOW_KEEPRATIO);
-            imshow("Display window", image);
-            waitKey(0);
+            //namedWindow("Display window", WINDOW_KEEPRATIO);
+            //imshow("Display window", image);
+            //waitKey(0);
 
             if (image.type() != CV_8UC3)
             {

@@ -1,5 +1,6 @@
 #include <opencv2/opencv.hpp>
 using namespace cv;
+using namespace std;
 
 extern "C"
 {
@@ -26,13 +27,33 @@ extern "C"
         // Create a Mat object that wraps around the passed in memory.
         Mat input(imageHeight, imageWidth, CV_8UC3, static_cast<void*>(imageBuffer));
 
+        // Convert the image to grayscale.
+        cvtColor(input, input, COLOR_RGB2GRAY);
+
+        blur(input, input, Size(3, 3));
         DEBUGIMG(input);
 
-        // Convert the image to grayscale.
-        Mat grayscaleImage(imageHeight, imageWidth, CV_8U);
-        cvtColor(input, grayscaleImage, COLOR_RGB2GRAY);
+        // Apply a threshold & convert the image to a binary.
+        threshold(input, input, 127, 150, THRESH_BINARY);
+        DEBUGIMG(input);
+        
+        // TODO: Use connectedcomponents to reduce noise.
+        // ...
 
-        DEBUGIMG(grayscaleImage);
+        // Find the contours.
+        vector<vector<Point>> contours;
+        vector<Vec4i> hierarchy;
+        findContours(input, contours, hierarchy, CV_RETR_TREE, CHAIN_APPROX_SIMPLE);
+
+        // Visualize contours
+        RNG rng(12345);
+        Mat drawing = Mat::zeros(input.size(), CV_8UC3);
+        for (int i = 0; i< contours.size(); i++)
+        {
+            Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+            drawContours(drawing, contours, i, color, 2, 8, hierarchy, 0, Point());
+        }
+        DEBUGIMG(drawing);
 
         return 0;
     }
