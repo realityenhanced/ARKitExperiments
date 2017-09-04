@@ -14,7 +14,6 @@ public class RealWorldColorPickerController : MonoBehaviour {
 	public CursorManager m_cursorManager;
 
 	// Privates
-	Texture2D m_centerPixTex;
 	bool m_isObjectPlaced = false;
 	bool m_isCursorHidden = false;
 	Material m_materialToUpdate;
@@ -22,12 +21,13 @@ public class RealWorldColorPickerController : MonoBehaviour {
 	GameObject m_shadowPlane;
 	int m_animationId;
 	Animator m_actorAnimator;
+    CaptureCenterPixel m_pixelCapturer;
 
-	// Use this for initialization
-	void Start () {
-		m_centerPixTex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+    // Use this for initialization
+    void Start () {
 		m_animationId = Animator.StringToHash ("wasColored");
-	}
+        m_pixelCapturer = m_arCamera.GetComponent<CaptureCenterPixel>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -51,40 +51,17 @@ public class RealWorldColorPickerController : MonoBehaviour {
 			}
 		} else if (m_isCursorHidden) {
 			Debug.Log ("Capture color and enable cursor");
-			Resolution res = Screen.currentResolution;
-			int x = res.width / 2 - 1;
-			int y = res.height / 2 - 1;
-
-			m_materialToUpdate.color = GetRealWorldColorAt (x, y);
 			m_actorAnimator.SetTrigger (m_animationId);
+            
+            m_materialToUpdate.color = m_pixelCapturer.m_lastCapturedColor;
 
-			m_cursorManager.Enable();
+            m_cursorManager.Enable();
 			m_isCursorHidden = false;
 		} else if (Utils.WasTouchStartDetected()) {
 			Debug.Log ("Hide cursor and render a frame before capturing the color.");
 			m_cursorManager.Disable();
-			m_isCursorHidden = true;
+            m_pixelCapturer.m_shouldCaptureOnNextFrame = true;
+            m_isCursorHidden = true;
 		}
-	}
-
-	// Helpers
-	Color GetRealWorldColorAt(int x, int y) {
-		Color realWorldColor = Color.green;
-
-		if (!m_centerPixTex) {
-			m_centerPixTex = new Texture2D (1, 1, TextureFormat.RGBA32, false);
-		}
-
-		// Hacky: Make sure the pixel is not occluded by the cursor.
-		m_centerPixTex.ReadPixels(
-			new Rect(x, y, 1, 1),
-			0, 0);
-		m_centerPixTex.Apply();
-
-		realWorldColor = m_centerPixTex.GetPixels()[0];
-	
-		Debug.Log ("Color = " + realWorldColor.ToString());
-
-		return realWorldColor;
 	}
 }
