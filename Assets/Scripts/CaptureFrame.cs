@@ -13,8 +13,19 @@ public class CaptureFrame : MonoBehaviour
         if (m_shouldCaptureOnNextFrame)
         {
             Camera camera = GetComponent<Camera>();
-            int rtWidth = camera.activeTexture.width;
-            int rtHeight = camera.activeTexture.height;
+            int rtWidth;
+            int rtHeight;
+            if (camera.activeTexture)
+            {
+                rtWidth = camera.activeTexture.width;
+                rtHeight = camera.activeTexture.height;
+            }
+            else
+            {
+                rtWidth = Screen.currentResolution.width;
+                rtHeight = Screen.currentResolution.height;
+            }
+
             if (m_lastCapturedFrame == null || m_lastCapturedFrame.width != rtWidth || m_lastCapturedFrame.height != rtHeight)
             {
                 m_lastCapturedFrame = new Texture2D(rtWidth, rtHeight, TextureFormat.ARGB32, false);
