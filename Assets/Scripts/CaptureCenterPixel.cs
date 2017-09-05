@@ -36,5 +36,4 @@ public class CaptureCenterPixel : MonoBehaviour {
         
         return m_centerPixTex.GetPixels()[0];
     }
-
 }
