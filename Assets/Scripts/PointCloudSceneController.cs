@@ -21,6 +21,7 @@ public class PointCloudSceneController : SceneController {
 	uint m_currentPointCloudId = 0;
 	Texture2D m_screenPixelTexture;
 	bool m_shouldSampleColorOnNextFrame = false;
+    CaptureCenterPixel m_pixelCapturer;
 
 	protected override void Start() {
 		base.Start();
@@ -29,8 +30,10 @@ public class PointCloudSceneController : SceneController {
 		m_pointColors = new List<Color> ();
 		m_particleSystem = Instantiate (m_particleSystemPrefab);
 
-		// Clear any ply files that were written last time.
-		Utils.DeleteAllAppFiles ();
+        m_pixelCapturer = Camera.main.GetComponent<CaptureCenterPixel>();
+
+        // Clear any ply files that were written last time.
+        Utils.DeleteAllAppFiles ();
 	}
 
 	// Update is called once per frame
@@ -42,7 +45,9 @@ public class PointCloudSceneController : SceneController {
 			} else {
 				ClearPointCloud ();
 				AddPoint (m_cursorManager.GetCurrentCursorPosition ());
-				m_isCaptureInProgress = true;
+
+                m_pixelCapturer.m_shouldCaptureOnNextFrame = true;
+                m_isCaptureInProgress = true;
 			}
 		} else if (m_isCaptureInProgress) {
 			if (m_shouldSampleColorOnNextFrame) {
@@ -97,19 +102,6 @@ public class PointCloudSceneController : SceneController {
 		}
 	}
 
-	Color GetScreenColorAt(int x, int y) {
-		if (!m_screenPixelTexture) {
-			m_screenPixelTexture = new Texture2D (1, 1, TextureFormat.RGBA32, false);
-		}
-
-		m_screenPixelTexture.ReadPixels(
-			new Rect(x, y, 1, 1),
-			0, 0);
-		m_screenPixelTexture.Apply();
-
-		return m_screenPixelTexture.GetPixels()[0];
-	}
-
 	void ClearPointCloud ()
 	{
 		m_pointCloud.Clear ();
@@ -129,8 +121,7 @@ public class PointCloudSceneController : SceneController {
 
 	void SampleColor ()
 	{
-		var color = GetScreenColorAt (Screen.currentResolution.width / 2 - 1, Screen.currentResolution.height / 2 - 1);
-		m_pointColors.Add (color);
+		m_pointColors.Add (m_pixelCapturer.m_lastCapturedColor);
 		ShowSceneElements (true);
 		m_shouldSampleColorOnNextFrame = false;
 	}
