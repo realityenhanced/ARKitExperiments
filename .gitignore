@@ -49,3 +49,4 @@ Assets/Plugins/iOS/GoogleCastRemoteDisplay/
 *.xcuserstate
 *.plist
 *.xcworkspacedata
+Assets/Plugins/iOS/OpencvProcessing/opencv2.framework.meta
