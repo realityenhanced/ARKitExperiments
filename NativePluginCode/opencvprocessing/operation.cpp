@@ -20,8 +20,8 @@ extern "C"
 #endif
 // TMP HELPERS
 
-    ////////////// JUST EXERCISING OPENCV ////////////////
-    int Test(uchar* imageBuffer, int imageWidth, int imageHeight)
+    ////////////// TEST: EXERCISING OPENCV ////////////////
+    int CreateMesh(uchar* imageBuffer, int imageWidth, int imageHeight)
     {
         // Create a Mat object that wraps around the passed in memory.
         Mat input(imageHeight, imageWidth, CV_8UC3, static_cast<void*>(imageBuffer));
@@ -33,11 +33,13 @@ extern "C"
         DEBUGIMG(input);
 
         // Apply a threshold & convert the image to a binary.
-        threshold(input, input, 127, 150, THRESH_BINARY);
+        threshold(input, input, 80, 255, THRESH_BINARY);
         DEBUGIMG(input);
 
-        // TODO: Use connectedcomponents to reduce noise.
-        // ...
+        int morph_size = 3;
+        Mat element = getStructuringElement(MORPH_RECT, Size(morph_size, morph_size));
+        morphologyEx(input, input, MORPH_CLOSE, element);
+        DEBUGIMG(input);
 
         // Find the contours.
         vector<vector<Point>> contours;
@@ -134,6 +136,6 @@ extern "C"
     // ASSUME imageBuffer has 3 Bytes per pixel (RGB) layout
     int PerformOperation(uchar* imageBuffer, int imageWidth, int imageHeight)
     {
-        return ImageMatcher(imageBuffer, imageWidth, imageHeight);
+        return CreateMesh(imageBuffer, imageWidth, imageHeight);
     }
 }
