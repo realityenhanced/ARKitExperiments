@@ -1,10 +1,10 @@
-#include <opencv2/opencv.hpp>
+#include "..\common.h"
 #include <iostream>
-
-extern "C" int PerformOperation(uchar* imageBuffer, int numColumns, int numRows);
 
 using namespace cv;
 using namespace std;
+
+#define FUNCTION_TO_EXECUTE(a,b,c) MatchDescriptors(a,b,c);
 
 int main(int argc, char** argv)
 {
@@ -20,10 +20,6 @@ int main(int argc, char** argv)
         }
         else
         {
-            //namedWindow("Display window", WINDOW_KEEPRATIO);
-            //imshow("Display window", image);
-            //waitKey(0);
-
             if (image.type() != CV_8UC3)
             {
                 printf("Invalid mat");
@@ -31,7 +27,8 @@ int main(int argc, char** argv)
             }
             else
             {
-                cout << PerformOperation(image.ptr(), image.cols, image.rows) << endl;
+                int result = FUNCTION_TO_EXECUTE(image.ptr(), image.cols, image.rows);
+                cout << result << endl;
             }
         }
     }

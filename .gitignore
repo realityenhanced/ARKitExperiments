@@ -50,3 +50,4 @@ Assets/Plugins/iOS/GoogleCastRemoteDisplay/
 *.plist
 *.xcworkspacedata
 Assets/Plugins/iOS/OpencvProcessing/opencv2.framework.meta
+NativePluginCode/opencvprocessing/windows/InputImage.yml
