@@ -8,6 +8,8 @@ public class OpencvExperimentController : MonoBehaviour {
     bool m_isScreenBeingCaptured = false;
     CaptureFrame m_frameCapturer;
     bool m_shouldSaveDescriptor = true;
+    
+    public CursorManager m_cursorManager;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,7 @@ public class OpencvExperimentController : MonoBehaviour {
             Debug.Log("Feed the captured frame top opencv");
 
             m_isScreenBeingCaptured = false;
+	    m_cursorManager.Enable();
 
             if (m_shouldSaveDescriptor) {
                 Debug.Log(m_opencvProcessing.SaveDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame));
@@ -39,6 +42,7 @@ public class OpencvExperimentController : MonoBehaviour {
                 return;
             }
 
+	    m_cursorManager.Disable();
             m_frameCapturer.m_shouldCaptureOnNextFrame = true;
             m_isScreenBeingCaptured = true;
 
