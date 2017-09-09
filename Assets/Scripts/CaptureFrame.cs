@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,7 +28,7 @@ public class CaptureFrame : MonoBehaviour
 
             if (m_lastCapturedFrame == null || m_lastCapturedFrame.width != rtWidth || m_lastCapturedFrame.height != rtHeight)
             {
-                m_lastCapturedFrame = new Texture2D(rtWidth, rtHeight, TextureFormat.ARGB32, false);
+                m_lastCapturedFrame = new Texture2D(rtWidth, rtHeight, TextureFormat.RGB24, false);
             }
 
             m_lastCapturedFrame.ReadPixels(new Rect(0, 0, rtWidth, rtHeight), 0, 0);

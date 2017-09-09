@@ -23,13 +23,12 @@ public class OpencvExperimentController : MonoBehaviour {
 
             m_isScreenBeingCaptured = false;
 
-            // Toggle between saving and matching descriptors for now.
             if (m_shouldSaveDescriptor) {
                 Debug.Log(m_opencvProcessing.SaveDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame));
+		// Save descriptors only on the first tap. Subsequent taps cause descriptor matches.
                 m_shouldSaveDescriptor = false;
             } else {
                 Debug.Log(m_opencvProcessing.MatchDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame));
-                m_shouldSaveDescriptor = true;
             }
         }
         else if (Utils.WasTouchStartDetected())
