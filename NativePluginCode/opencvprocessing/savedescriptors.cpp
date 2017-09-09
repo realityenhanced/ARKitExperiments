@@ -3,6 +3,8 @@
 using namespace cv;
 using namespace std;
 
+Mat descriptorsOfImage;
+
 extern "C" int SaveDescriptors(uchar* imageBuffer, int imageWidth, int imageHeight)
 {
     // Create a Mat object that wraps around the passed in memory.
@@ -21,9 +23,12 @@ extern "C" int SaveDescriptors(uchar* imageBuffer, int imageWidth, int imageHeig
     extractor->compute(input, keypoints, descriptors);
     descriptors.convertTo(descriptors, CV_32F);
 
-    FileStorage fsWrite("InputImage.yml", FileStorage::WRITE);
-    fsWrite << "descriptors" << descriptors;
-    fsWrite.release();
+    cout << "Descriptor size = " << descriptors.rows << " x " << descriptors.cols <<endl;
+    descriptorsOfImage = descriptors;
+
+    //FileStorage fsWrite("InputImage.yml", FileStorage::WRITE);
+    //fsWrite << "descriptors" << descriptors;
+    //fsWrite.release();
 
     return 1;
 }

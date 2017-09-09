@@ -9,13 +9,21 @@
 /* Begin PBXBuildFile section */
 		191B03F91F566B4700232991 /* opencv2.framework in Headers */ = {isa = PBXBuildFile; fileRef = 191B03F81F566B2800232991 /* opencv2.framework */; };
 		191B03FA1F566B4C00232991 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 191B03F81F566B2800232991 /* opencv2.framework */; };
-		196A22EF1F566C6300544294 /* operation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 196A22ED1F566C6300544294 /* operation.cpp */; };
+		19F169531F63986F00CC7251 /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19F1694E1F63986F00CC7251 /* common.cpp */; };
+		19F169541F63986F00CC7251 /* matchdescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19F1694F1F63986F00CC7251 /* matchdescriptors.cpp */; };
+		19F169551F63986F00CC7251 /* createmesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19F169501F63986F00CC7251 /* createmesh.cpp */; };
+		19F169561F63986F00CC7251 /* savedescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19F169511F63986F00CC7251 /* savedescriptors.cpp */; };
+		19F169571F63986F00CC7251 /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = 19F169521F63986F00CC7251 /* common.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		191B03F81F566B2800232991 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
-		196A22ED1F566C6300544294 /* operation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = operation.cpp; sourceTree = "<group>"; };
 		19CC0F271F566A92006812D8 /* libopencvprocessing.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libopencvprocessing.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		19F1694E1F63986F00CC7251 /* common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = common.cpp; sourceTree = "<group>"; };
+		19F1694F1F63986F00CC7251 /* matchdescriptors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = matchdescriptors.cpp; sourceTree = "<group>"; };
+		19F169501F63986F00CC7251 /* createmesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = createmesh.cpp; sourceTree = "<group>"; };
+		19F169511F63986F00CC7251 /* savedescriptors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = savedescriptors.cpp; sourceTree = "<group>"; };
+		19F169521F63986F00CC7251 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,8 +41,12 @@
 		19CC0F1E1F566A92006812D8 = {
 			isa = PBXGroup;
 			children = (
+				19F1694E1F63986F00CC7251 /* common.cpp */,
+				19F169521F63986F00CC7251 /* common.h */,
+				19F169501F63986F00CC7251 /* createmesh.cpp */,
+				19F1694F1F63986F00CC7251 /* matchdescriptors.cpp */,
+				19F169511F63986F00CC7251 /* savedescriptors.cpp */,
 				191B03F81F566B2800232991 /* opencv2.framework */,
-				196A22ED1F566C6300544294 /* operation.cpp */,
 				19CC0F281F566A92006812D8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,6 +67,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				191B03F91F566B4700232991 /* opencv2.framework in Headers */,
+				19F169571F63986F00CC7251 /* common.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,7 +144,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				196A22EF1F566C6300544294 /* operation.cpp in Sources */,
+				19F169551F63986F00CC7251 /* createmesh.cpp in Sources */,
+				19F169531F63986F00CC7251 /* common.cpp in Sources */,
+				19F169541F63986F00CC7251 /* matchdescriptors.cpp in Sources */,
+				19F169561F63986F00CC7251 /* savedescriptors.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,11 +7,12 @@ public class OpencvExperimentController : MonoBehaviour {
     OpencvProcessingInterface m_opencvProcessing;
     bool m_isScreenBeingCaptured = false;
     CaptureFrame m_frameCapturer;
+    bool m_shouldSaveDescriptor = true;
 
 	// Use this for initialization
 	void Start () {
-		m_opencvProcessing = new OpencvProcessingInterface();
-        m_frameCapturer = Camera.main.GetComponent<CaptureFrame>();
+	    m_opencvProcessing = new OpencvProcessingInterface();
+            m_frameCapturer = Camera.main.GetComponent<CaptureFrame>();
 	}
 	
 	// Update is called once per frame
@@ -21,7 +22,15 @@ public class OpencvExperimentController : MonoBehaviour {
             Debug.Log("Feed the captured frame top opencv");
 
             m_isScreenBeingCaptured = false;
-            Debug.Log(m_opencvProcessing.PerformProcessing(m_frameCapturer.m_lastCapturedFrame));
+
+            // Toggle between saving and matching descriptors for now.
+            if (m_shouldSaveDescriptor) {
+                Debug.Log(m_opencvProcessing.SaveDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame));
+                m_shouldSaveDescriptor = false;
+            } else {
+                Debug.Log(m_opencvProcessing.MatchDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame));
+                m_shouldSaveDescriptor = true;
+            }
         }
         else if (Utils.WasTouchStartDetected())
         {
