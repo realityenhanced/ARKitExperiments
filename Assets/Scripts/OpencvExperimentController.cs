@@ -9,8 +9,6 @@ public class OpencvExperimentController : MonoBehaviour {
     CaptureFrame m_frameCapturer;
     bool m_shouldSaveDescriptor = true;
     
-    public CursorManager m_cursorManager;
-
 	// Use this for initialization
 	void Start () {
 	    m_opencvProcessing = new OpencvProcessingInterface();
@@ -19,25 +17,18 @@ public class OpencvExperimentController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (m_isScreenBeingCaptured)
+        if (m_shouldSaveDescriptor && m_isScreenBeingCaptured)
         {
             Debug.Log("Feed the captured frame top opencv");
 
             m_isScreenBeingCaptured = false;
-	    m_cursorManager.Enable();
+            
+            Debug.Log(m_opencvProcessing.SaveDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame));
 
-            if (m_shouldSaveDescriptor) {
-                Debug.Log(m_opencvProcessing.SaveDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame));
-		// Save descriptors only on the first tap. Subsequent taps cause descriptor matches.
-                m_shouldSaveDescriptor = false;
-            } else {
-                Rect boundingRect = new Rect(0,0,0,0);
-                Debug.Log(m_opencvProcessing.MatchDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame, ref boundingRect));
-                Debug.Log(boundingRect);
-
-            }
+            // Save descriptors only on the first tap.
+            m_shouldSaveDescriptor = false;
         }
-        else if (Utils.WasTouchStartDetected())
+        else if (m_shouldSaveDescriptor && Utils.WasTouchStartDetected())
         {
             if (Utils.IsTouchOnUI())
             {
@@ -45,11 +36,26 @@ public class OpencvExperimentController : MonoBehaviour {
                 return;
             }
 
-	    m_cursorManager.Disable();
             m_frameCapturer.m_shouldCaptureOnNextFrame = true;
             m_isScreenBeingCaptured = true;
 
             Debug.Log("Capture screen and feed the opencv function on the next frame.");
+        }
+	else if (! m_shouldSaveDescriptor)
+        {
+            if (m_isScreenBeingCaptured)
+            {
+                Rect boundingRect = new Rect(0,0,0,0);
+                Debug.Log(m_opencvProcessing.MatchDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame, ref boundingRect));
+                Debug.Log(boundingRect);
+
+                m_frameCapturer.m_shouldCaptureOnNextFrame = true;
+            }
+            else
+            {
+                 m_frameCapturer.m_shouldCaptureOnNextFrame = true;
+                 m_isScreenBeingCaptured = true;
+            }
         }
     }
 }
