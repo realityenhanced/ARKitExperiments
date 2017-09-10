@@ -10,5 +10,5 @@ extern void DebugDisplayImage(cv::Mat& mat);
 #endif
 
 extern "C" int SaveDescriptors(uchar* imageBuffer, int numColumns, int numRows);
-extern "C" int MatchDescriptors(uchar* imageBuffer, int numColumns, int numRows);
+extern "C" int MatchDescriptors(uchar* imageBuffer, int numColumns, int numRows, int* boundingRectangle);
 extern "C" int CreateMesh(uchar* imageBuffer, int numColumns, int numRows);

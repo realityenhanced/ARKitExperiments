@@ -6,7 +6,7 @@ using namespace std;
 
 extern Mat descriptorsOfImage;
 
-extern "C" int MatchDescriptors(uchar* imageBuffer, int imageWidth, int imageHeight)
+extern "C" int MatchDescriptors(uchar* imageBuffer, int imageWidth, int imageHeight, int* boundingRectangle)
 {
     int retVal = 0;
     
@@ -32,8 +32,7 @@ extern "C" int MatchDescriptors(uchar* imageBuffer, int imageWidth, int imageHei
 
     FlannBasedMatcher matcher;
     vector<DMatch> matches;
-    matcher.match(descriptorsOfImage, descriptors, matches);
-
+    matcher.match(/*query*/descriptors, /*train*/descriptorsOfImage, matches);
     if (matches.size() > 0)
     {
         double maxDist = 0;
@@ -41,22 +40,39 @@ extern "C" int MatchDescriptors(uchar* imageBuffer, int imageWidth, int imageHei
         for (int i = 0; i < descriptors.rows; i++)
         {
             double dist = matches[i].distance;
-            if (dist < minDist) minDist = dist;
-            if (dist > maxDist) maxDist = dist;
+            if (dist < minDist)
+            {
+                minDist = dist;
+            }
+            if (dist > maxDist)
+            {
+                maxDist = dist;
+            }
         }
         cout << "Max dist : " << maxDist << endl;
         cout << "Min dist : " << minDist << endl;
 
         std::vector< DMatch > goodMatches;
+        std::vector<Point> goodKeypoints;
         for (int i = 0; i < descriptors.rows; i++)
         {
             if (matches[i].distance <= max(2 * minDist, 0.02))
             {
                 goodMatches.push_back(matches[i]);
+                goodKeypoints.push_back(Point(keypoints[matches[i].queryIdx].pt.x, keypoints[matches[i].queryIdx].pt.y));
             }
         }
         cout << "Num good matches = " << goodMatches.size() << endl;
-        retVal = (goodMatches.size() > 0) ? 1 : 0;
+        
+        Rect boundary = boundingRect(goodKeypoints);
+        cout << "BOUNDARY = " << boundary.x << " " << boundary.y << " " << boundary.width << " " << boundary.height << endl;
+        boundingRectangle[0] = boundary.x;
+        boundingRectangle[1] = boundary.y;
+        boundingRectangle[2] = boundary.width;
+        boundingRectangle[3] = boundary.height;
+        
+        // TODO: Find a good heuristic to evaluate matches.
+        retVal = (minDist <= 100 && goodMatches.size() >= 4) ? 1 : 0;
     }
     else
     {
