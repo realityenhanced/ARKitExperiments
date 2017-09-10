@@ -115,7 +115,15 @@ public class OpencvExperimentController : MonoBehaviour {
             ARHitTestResult hitResult = Utils.GetFirstValidHit(hitResults);
             if (hitResult.isValid)
             {
-                m_actor.position = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
+                var nextPosition = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
+                if ((nextPosition - m_actor.position).magnitude > 0.001f)
+                {
+                    m_actor.position = nextPosition;
+                }
+                else
+                {
+                    Debug.Log((nextPosition - m_actor.position).magnitude);
+                }
             }
             else
             {
