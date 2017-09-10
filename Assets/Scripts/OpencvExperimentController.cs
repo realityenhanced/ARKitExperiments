@@ -10,6 +10,7 @@ public class OpencvExperimentController : MonoBehaviour {
     CaptureFrame m_frameCapturer;
     bool m_shouldSaveDescriptor = true;
     public GameObject m_actorPrefab;
+    bool m_scanningStarted = false;
 
     private Transform m_actor;
     private Rect m_boundingRect = new Rect(0,0,0,0);
@@ -53,26 +54,39 @@ public class OpencvExperimentController : MonoBehaviour {
 
             Debug.Log("Capture screen and feed the opencv function on the next frame.");
         }
-        else if (! m_shouldSaveDescriptor)
+        else if (!m_shouldSaveDescriptor && !m_scanningStarted)
         {
+	    StartCoroutine(ScanForMatches(1.0f));
+            m_scanningStarted = true;
+        }
+    }
+
+    private IEnumerator ScanForMatches(float timeInterval) {
+        if (m_actor == null)
+        {
+            m_actor = GameObject.Instantiate(m_actorPrefab).transform;
+        }
+
+	while(true) {
             if (m_isScreenBeingCaptured)
             {
-                Debug.Log(m_opencvProcessing.MatchDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame, ref m_boundingRect));
-                Debug.Log(m_boundingRect);
-
-                if (m_actor == null)
-                {
-                    m_actor = GameObject.Instantiate(m_actorPrefab).transform;
+                if (m_opencvProcessing.MatchDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame, ref m_boundingRect) == 1) {
+                    PlaceActorAt(m_boundingRect.x, m_boundingRect.y);
+                    m_actor.gameObject.SetActive(true);
                 }
-
-                PlaceActorAt(m_boundingRect.x, m_boundingRect.y);
-
-                m_frameCapturer.m_shouldCaptureOnNextFrame = true;
+                else
+                {
+                    m_actor.gameObject.SetActive(false);
+                }
+                
+                m_isScreenBeingCaptured = false;
+                yield return new WaitForSeconds(timeInterval);
             }
             else
             {
-                 m_frameCapturer.m_shouldCaptureOnNextFrame = true;
-                 m_isScreenBeingCaptured = true;
+                m_actor.gameObject.SetActive(false);
+                m_frameCapturer.m_shouldCaptureOnNextFrame = true;
+                m_isScreenBeingCaptured = true;
             }
         }
     }
