@@ -58,13 +58,8 @@ public class OpencvProcessingInterface  {
         }
         else
         {
-            if (m_lastBufferMarshalled == null || m_lastBufferMarshalled.Length != frame.width * frame.height * 3)
-            {
-                Debug.Log("Creating new buffer");
-                m_lastBufferMarshalled = frame.GetRawTextureData();
-
-                m_lastBufferMarshalledWidth = frame.width;
-            }
+            m_lastBufferMarshalled = frame.GetRawTextureData();
+            m_lastBufferMarshalledWidth = frame.width;
 
             int size = Marshal.SizeOf(m_lastBufferMarshalled[0]) * m_lastBufferMarshalled.Length;
             if (m_marshalledBuffer == null || m_marshalledSize != size)
