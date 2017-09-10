@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.iOS;
 
 public class OpencvExperimentController : MonoBehaviour {
     // Privates
@@ -8,15 +9,26 @@ public class OpencvExperimentController : MonoBehaviour {
     bool m_isScreenBeingCaptured = false;
     CaptureFrame m_frameCapturer;
     bool m_shouldSaveDescriptor = true;
+    public GameObject m_actorPrefab;
+
+    private Transform m_actor;
+    private Rect m_boundingRect = new Rect(0,0,0,0);
+    const ARHitTestResultType m_resultTypeToUse = ARHitTestResultType.ARHitTestResultTypeFeaturePoint;
+
+    ARPoint m_hitPoint = new ARPoint
+    {
+        x = 0.5f,
+        y = 0.5f
+    };
+
+    // Use this for initialization
+    void Start () {
+        m_opencvProcessing = new OpencvProcessingInterface();
+        m_frameCapturer = Camera.main.GetComponent<CaptureFrame>();
+    }
     
-	// Use this for initialization
-	void Start () {
-	    m_opencvProcessing = new OpencvProcessingInterface();
-            m_frameCapturer = Camera.main.GetComponent<CaptureFrame>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
         if (m_shouldSaveDescriptor && m_isScreenBeingCaptured)
         {
             Debug.Log("Feed the captured frame top opencv");
@@ -41,13 +53,19 @@ public class OpencvExperimentController : MonoBehaviour {
 
             Debug.Log("Capture screen and feed the opencv function on the next frame.");
         }
-	else if (! m_shouldSaveDescriptor)
+        else if (! m_shouldSaveDescriptor)
         {
             if (m_isScreenBeingCaptured)
             {
-                Rect boundingRect = new Rect(0,0,0,0);
-                Debug.Log(m_opencvProcessing.MatchDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame, ref boundingRect));
-                Debug.Log(boundingRect);
+                Debug.Log(m_opencvProcessing.MatchDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame, ref m_boundingRect));
+                Debug.Log(m_boundingRect);
+
+                if (m_actor == null)
+                {
+                    m_actor = GameObject.Instantiate(m_actorPrefab).transform;
+                }
+
+                PlaceActorAt(m_boundingRect.x, m_boundingRect.y);
 
                 m_frameCapturer.m_shouldCaptureOnNextFrame = true;
             }
@@ -56,6 +74,30 @@ public class OpencvExperimentController : MonoBehaviour {
                  m_frameCapturer.m_shouldCaptureOnNextFrame = true;
                  m_isScreenBeingCaptured = true;
             }
+        }
+    }
+
+    private void PlaceActorAt(float x, float y)
+    {
+        m_hitPoint.x = x / (float)Screen.currentResolution.width;
+        m_hitPoint.y = y / (float)Screen.currentResolution.height;
+
+        Debug.Log("HIT POINT = " + m_hitPoint);
+
+        List<ARHitTestResult> hitResults =
+            UnityARSessionNativeInterface.GetARSessionNativeInterface().HitTest(m_hitPoint, m_resultTypeToUse);
+        if (hitResults.Count > 0)
+        {
+            ARHitTestResult hitResult = Utils.GetFirstValidHit(hitResults);
+            if (hitResult.isValid)
+            {
+                m_actor.position = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
+                Debug.Log("Actor pos updated");
+            }
+        }
+        else
+        {
+            Debug.Log("No hit points");
         }
     }
 }
