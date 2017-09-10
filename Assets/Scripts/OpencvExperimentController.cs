@@ -99,6 +99,7 @@ public class OpencvExperimentController : MonoBehaviour {
 
                 m_frameCapturer.m_shouldCaptureOnNextFrame = true;
                 m_isScreenBeingCaptured = true;
+                yield return new WaitForEndOfFrame();
             }
         }
     }
@@ -115,6 +116,10 @@ public class OpencvExperimentController : MonoBehaviour {
             if (hitResult.isValid)
             {
                 m_actor.position = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
+            }
+            else
+            {
+                Debug.Log("Invalid hit point");
             }
         }
         else

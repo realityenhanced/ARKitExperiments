@@ -35,12 +35,11 @@ public class OpencvProcessingInterface  {
     public Color GetColorFromFrameAt(int x, int y)
     {
         int pixelStart = 3 * (y * m_lastBufferMarshalledWidth + x);
-
         byte r = m_lastBufferMarshalled[pixelStart];
         byte g = m_lastBufferMarshalled[pixelStart + 1];
         byte b = m_lastBufferMarshalled[pixelStart + 2];
 
-        return new Color(r, g, b, 1.0f);
+        return new Color(r/255.0f, g/255.0f, b/255.0f, 1.0f);
     }
 
     ~OpencvProcessingInterface()
