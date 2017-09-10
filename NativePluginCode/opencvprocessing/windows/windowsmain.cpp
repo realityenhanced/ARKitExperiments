@@ -4,8 +4,6 @@
 using namespace cv;
 using namespace std;
 
-#define FUNCTION_TO_EXECUTE(a,b,c) MatchDescriptors(a,b,c);
-
 int main(int argc, char** argv)
 {
     int retVal = 0;
@@ -27,7 +25,8 @@ int main(int argc, char** argv)
             }
             else
             {
-                int result = FUNCTION_TO_EXECUTE(image.ptr(), image.cols, image.rows);
+                int* arrayToBeFilled = new int[4];
+                int result = MatchDescriptors(image.ptr(), image.cols, image.rows, arrayToBeFilled);
                 cout << result << endl;
             }
         }
@@ -40,4 +39,3 @@ int main(int argc, char** argv)
 
     return retVal;
 }
-
