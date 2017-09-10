@@ -3,7 +3,7 @@
 using namespace cv;
 using namespace std;
 
-// Function Incomplete: Investigate constrained delaunay triangulation.
+//TEST : INCOMPLETE IMPLN//
 extern "C" int CreateMesh(uchar* imageBuffer, int imageWidth, int imageHeight)
 {
     // Create a Mat object that wraps around the passed in memory.

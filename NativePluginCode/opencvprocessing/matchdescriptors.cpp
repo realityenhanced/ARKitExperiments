@@ -4,21 +4,14 @@
 using namespace cv;
 using namespace std;
 
-extern Mat descriptorsOfImage;
+extern Mat g_descriptorsOfImage;
 
 extern "C" int MatchDescriptors(uchar* imageBuffer, int imageWidth, int imageHeight, int* boundingRectangle)
 {
     int retVal = 0;
     
-    //Mat descriptorsOfImage;
-    //cv::FileStorage fsRead("InputImage.yml", FileStorage::READ);
-    //fsRead["descriptors"] >> descriptorsOfImage;
-    cout << "Descriptor size = " << descriptorsOfImage.rows << " x " << descriptorsOfImage.cols <<endl;
-
     // Create a Mat object that wraps around the passed in memory.
     Mat input(imageHeight, imageWidth, CV_8UC3, static_cast<void*>(imageBuffer));
-
-    // Convert the image to grayscale.
     cvtColor(input, input, COLOR_RGB2GRAY);
 
     Ptr<FeatureDetector> detector = ORB::create();
@@ -32,7 +25,7 @@ extern "C" int MatchDescriptors(uchar* imageBuffer, int imageWidth, int imageHei
 
     FlannBasedMatcher matcher;
     vector<DMatch> matches;
-    matcher.match(/*query*/descriptors, /*train*/descriptorsOfImage, matches);
+    matcher.match(/*query*/descriptors, /*train*/g_descriptorsOfImage, matches);
     if (matches.size() > 0)
     {
         double maxDist = 0;
@@ -59,7 +52,7 @@ extern "C" int MatchDescriptors(uchar* imageBuffer, int imageWidth, int imageHei
             if (matches[i].distance <= max(2 * minDist, 0.02))
             {
                 goodMatches.push_back(matches[i]);
-                goodKeypoints.push_back(Point(keypoints[matches[i].queryIdx].pt.x, keypoints[matches[i].queryIdx].pt.y));
+                goodKeypoints.push_back(Point(static_cast<int>(keypoints[matches[i].queryIdx].pt.x), static_cast<int>(keypoints[matches[i].queryIdx].pt.y)));
             }
         }
         cout << "Num good matches = " << goodMatches.size() << endl;
