@@ -65,7 +65,7 @@ extern "C" int MatchDescriptors(uchar* imageBuffer, int imageWidth, int imageHei
         boundingRectangle[3] = boundary.height;
         
         // TODO: Find a good heuristic to evaluate matches.
-        retVal = (minDist <= 100 && goodMatches.size() >= 4) ? 1 : 0;
+        retVal = (minDist <= 100 && goodMatches.size() >= 2) ? 1 : 0;
     }
     else
     {

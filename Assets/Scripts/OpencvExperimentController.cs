@@ -22,6 +22,7 @@ public class OpencvExperimentController : MonoBehaviour {
         y = 0.5f
     };
     Material m_materialToUpdate;
+    Vector3 m_offset = new Vector3(0.1f, 0.0f, 0.1f);
 
     enum STATE
     {
@@ -76,7 +77,7 @@ public class OpencvExperimentController : MonoBehaviour {
             {
                 if (m_opencvProcessing.MatchDescriptorsForFrame(m_frameCapturer.m_lastCapturedFrame, ref m_boundingRect) == 1)
                 {
-                    float x = m_boundingRect.x + m_boundingRect.width / 2;
+                    float x = m_boundingRect.x + m_boundingRect.width / 2;;
                     float y = m_boundingRect.y + m_boundingRect.height / 2;
 
                     PlaceActorAt(x, y);
@@ -106,8 +107,8 @@ public class OpencvExperimentController : MonoBehaviour {
 
     private void PlaceActorAt(float x, float y)
     {
-        m_hitPoint.x = x / (float)Screen.currentResolution.width;
-        m_hitPoint.y = y / (float)Screen.currentResolution.height;
+        m_hitPoint.x = x / (float) m_opencvProcessing.m_lastBufferMarshalledWidth;
+        m_hitPoint.y = y / (float) m_opencvProcessing.m_lastBufferMarshalledHeight;
 
         List<ARHitTestResult> hitResults = m_arSession.HitTest(m_hitPoint, m_resultTypeToUse);
         if (hitResults.Count > 0)
@@ -118,7 +119,7 @@ public class OpencvExperimentController : MonoBehaviour {
                 var nextPosition = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
                 if ((nextPosition - m_actor.position).magnitude > 0.1f)
                 {
-                    m_actor.position = nextPosition;
+                    m_actor.position = nextPosition - m_offset;
                 }
             }
             else

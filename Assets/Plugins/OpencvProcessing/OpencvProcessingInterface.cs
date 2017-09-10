@@ -9,7 +9,9 @@ public class OpencvProcessingInterface  {
     IntPtr m_marshalledBuffer;
     int m_marshalledSize;
     byte[] m_lastBufferMarshalled;
-    int m_lastBufferMarshalledWidth;
+
+    public int m_lastBufferMarshalledWidth;
+    public int m_lastBufferMarshalledHeight;
 
     [DllImport ("__Internal")]
     private static extern int SaveDescriptors(IntPtr buffer, int width, int height);
@@ -59,6 +61,7 @@ public class OpencvProcessingInterface  {
         {
             m_lastBufferMarshalled = frame.GetRawTextureData();
             m_lastBufferMarshalledWidth = frame.width;
+            m_lastBufferMarshalledHeight = frame.height;
 
             int size = Marshal.SizeOf(m_lastBufferMarshalled[0]) * m_lastBufferMarshalled.Length;
             if (m_marshalledBuffer == null || m_marshalledSize != size)
