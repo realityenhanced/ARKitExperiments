@@ -14,9 +14,11 @@ Runtime NavMesh video @ https://youtu.be/7sG2VOsUDPQ
 Physics Experiment video @ https://youtu.be/FZoUUAR6TkQ
 
 # Software Versions used
-#### Unity: 5.6.2p4
+#### Unity: 2017.1.1f1
 #### XCode: XCode 9 Beta 5
 #### Unity ARKit Plugin: version 1.0.7
+#### OpenCV 3.3.0
+(NOTE: Manually copy OpenCV iOS pack from http://opencv.org/releases.html to the following  folders: Assets/Plugins/iOS/OpenCVProcessing & NativePluginCode/opencvprocessing/)
 
 # Helpful Resources
 ## How to set up Unity for ARKit?
