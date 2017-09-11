@@ -13,6 +13,8 @@ Runtime NavMesh video @ https://youtu.be/7sG2VOsUDPQ
 
 Physics Experiment video @ https://youtu.be/FZoUUAR6TkQ
 
+OpenCV Experiment video @ https://youtu.be/v6x6Aa9qLXE
+
 # Software Versions used
 #### Unity: 2017.1.1f1
 #### XCode: XCode 9 Beta 5
