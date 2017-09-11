@@ -119,7 +119,7 @@ public class OpencvExperimentController : MonoBehaviour {
                 var nextPosition = UnityARMatrixOps.GetPosition(hitResult.worldTransform);
                 if ((nextPosition - m_actor.position).magnitude > 0.1f)
                 {
-                    m_actor.position = nextPosition - m_offset;
+                    m_actor.position = nextPosition + m_offset;
                 }
             }
             else
