@@ -9,6 +9,9 @@ Occlusion experiment video @ https://youtu.be/MK3D91kCKzM
 
 Point cloud experiment video @ https://youtu.be/kupq1C41XcU
 
+[NOTE: Accessing the ply file requires a manual update to the XCode project.
+More info below under "How to access files written by a Unity app on iOS?"]
+
 Runtime NavMesh video @ https://youtu.be/7sG2VOsUDPQ
 
 Physics Experiment video @ https://youtu.be/FZoUUAR6TkQ
@@ -34,6 +37,9 @@ https://developer.apple.com/documentation/arkit/understanding_augmented_reality
 
 ## How to access files written by a Unity app on iOS?
 https://blog.playmedusa.com/creating-and-retrieving-a-file-from-an-ios-device-with-unity3/
+
+"In XCode, open Info.plist and add a new Key, UIFileSharingEnabled:
+Application supports iTunes file sharing – YES"
 
 ## Credits
 Rooster model from https://www.blendswap.com/blends/view/80230 released under CC-0 by [CDmir230](https://www.blendswap.com/user/CDmir230)
