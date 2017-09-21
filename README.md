@@ -20,7 +20,7 @@ OpenCV Experiment video @ https://youtu.be/v6x6Aa9qLXE
 
 # Software Versions used
 #### Unity: 2017.1.1f1
-#### XCode: XCode 9 Beta 5
+#### XCode: Version 9.0 (9A235)
 #### Unity ARKit Plugin: version 1.0.7
 #### OpenCV 3.3.0
 (NOTE: Manually copy OpenCV iOS pack from https://sourceforge.net/projects/opencvlibrary/files/opencv-ios/3.3.0/opencv-3.3.0-ios-framework.zip/download to the following  folders: Assets/Plugins/iOS/OpenCVProcessing & NativePluginCode/opencvprocessing/)
