@@ -69,7 +69,7 @@ public class FurnitureSceneController : SceneController {
                     if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
                     {
                         var delta = Input.GetTouch(0).deltaPosition;
-                        m_furnitureTransform.Rotate(new Vector3(0, 1, 0), 90.0f*(delta.x/Screen.currentResolution.width));
+                        m_furnitureTransform.Rotate(new Vector3(0, 1, 0), -90.0f*(delta.x/Screen.currentResolution.width));
                     }
                 }
                 break;
