@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ public class FurnitureSceneController : SceneController {
 	// Script inputs
 	public CursorManager m_cursorManager;
 	public GameObject m_actorPrefab;
-    public float m_minimumThreshold = 0.01f;
+    public float m_minimumThreshold = 0.001f;
 
     // Privates
     private Transform m_furnitureTransform;
