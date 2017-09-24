@@ -7,9 +7,10 @@ public class FurnitureSceneController : SceneController {
 	// Script inputs
 	public CursorManager m_cursorManager;
 	public GameObject m_actorPrefab;
+    public float m_minimumThreshold = 0.01f;
 
-	// Privates
-	private Transform m_furnitureTransform;
+    // Privates
+    private Transform m_furnitureTransform;
 
     enum FurnitureState
     {
@@ -33,6 +34,10 @@ public class FurnitureSceneController : SceneController {
                     m_groundPos = m_cursorManager.GetCurrentCursorPosition();
                     m_furnitureTransform = GameObject.Instantiate(m_actorPrefab, m_groundPos, Quaternion.identity).transform;
 
+                    // Once the ground plane is established, move the cursor manager to raycast mode. (The World Hit Test mode is too noisy in low light conditions)
+                    // NOTE: The furniture prefab has a very large shadow plane that has raycast enabled on it. (The furniture doesn't participate in raycasts)
+                    m_cursorManager.SetMode(false);
+
                     m_furnitureState = FurnitureState.PlacementInProgress;
                 }
                 break;
@@ -46,7 +51,10 @@ public class FurnitureSceneController : SceneController {
                 {
                     // Move the furniture along with the cursor without modifying the Y position.
                     var cursorPos = m_cursorManager.GetCurrentCursorPosition();
-                    m_furnitureTransform.position = new Vector3(cursorPos.x, m_groundPos.y, cursorPos.z);
+                    if ((cursorPos - m_furnitureTransform.position).magnitude > m_minimumThreshold)
+                    {
+                        m_furnitureTransform.position = new Vector3(cursorPos.x, m_groundPos.y, cursorPos.z);
+                    }
                 }
                 break;
             case FurnitureState.Placed:
