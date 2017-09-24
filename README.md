@@ -1,4 +1,4 @@
-# ARKitExperiments
+﻿# ARKitExperiments
 Quick and dirty experiments with ARKit
 
 Shadow experiment video @ https://youtu.be/nxTQbGyFHkc
@@ -50,4 +50,4 @@ Dragon model from https://www.blendswap.com/blends/view/73418 released under CC-
 
 Dog model from https://www.blendswap.com/blends/view/70126 released under CC-0 by [Lula Borges](https://www.blendswap.com/user/Lula+Borges)
 
-Shitzu Dog Bark sound from https://freesound.org/people/Glitchedtones/sounds/372569/ released under CC-0 by [Glitchedtones](https://freesound.org/people/Glitchedtones/)
+Coffee Table model from https://www.blendswap.com/blends/view/67649 released under CC-BY by [Andr3yAngel](https://www.blendswap.com/user/Andr3yAngel)
