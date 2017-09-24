@@ -6,7 +6,7 @@ public class FurnitureSceneController : SceneController {
 
 	// Script inputs
 	public CursorManager m_cursorManager;
-	public GameObject m_actorPrefab;
+	public GameObject m_furniturePrefab;
     public float m_minimumThreshold = 0.001f;
 
     // Privates
@@ -32,7 +32,7 @@ public class FurnitureSceneController : SceneController {
                     // On the first tap, instantiate the furniture at the cursor location
                     // and move the furniture along the ground (with the cursor) till the second tap is detected.
                     m_groundPos = m_cursorManager.GetCurrentCursorPosition();
-                    m_furnitureTransform = GameObject.Instantiate(m_actorPrefab, m_groundPos, Quaternion.identity).transform;
+                    m_furnitureTransform = GameObject.Instantiate(m_furniturePrefab, m_groundPos, Quaternion.identity).transform;
 
                     // Once the ground plane is established, move the cursor manager to raycast mode. (The World Hit Test mode is too noisy in low light conditions)
                     // NOTE: The furniture prefab has a very large shadow plane that has raycast enabled on it. (The furniture doesn't participate in raycasts)
@@ -58,6 +58,20 @@ public class FurnitureSceneController : SceneController {
                 }
                 break;
             case FurnitureState.Placed:
+                if (Input.touchCount == 2)
+                {
+                    // On a 2 finger tap gesture, move back to placement mode.
+                    m_furnitureState = FurnitureState.PlacementInProgress;
+                }
+                else
+                {
+                    // After furniture is placed, rotate furniture on a single finger swipe.
+                    if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+                    {
+                        var delta = Input.GetTouch(0).deltaPosition;
+                        m_furnitureTransform.Rotate(new Vector3(0, 1, 0), 90.0f*(delta.x/Screen.currentResolution.width));
+                    }
+                }
                 break;
             default:
                 break;
