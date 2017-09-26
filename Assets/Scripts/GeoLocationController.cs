@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,6 +57,8 @@ public class GeoLocationController : MonoBehaviour {
         {
             Debug.Log("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp);
             Debug.Log("Heading: " + Input.compass.trueHeading);
+
+            objectTransform.rotation = Quaternion.Euler(0, cameraTransform.rotation.eulerAngles.y - Input.compass.trueHeading, 0);
         }
 
         Input.location.Stop();
