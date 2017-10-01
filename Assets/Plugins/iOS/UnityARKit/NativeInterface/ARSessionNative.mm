@@ -97,12 +97,18 @@ typedef struct
 
 typedef struct
 {
+    float ambientIntensity;
+    float ambientColorTemperature;
+}UnityARLightEstimation;
+
+typedef struct
+{
     UnityARMatrix4x4 worldTransform;
     UnityARMatrix4x4 projectionMatrix;
     UnityARTrackingState trackingState;
     UnityARTrackingReason trackingReason;
     UnityVideoParams videoParams;
-    float ambientIntensity;
+    UnityARLightEstimation lightEstimation;
     uint32_t getPointCloudData;
 } UnityARCamera;
 
@@ -431,8 +437,9 @@ static CGAffineTransform s_CurAffineTransform;
     unityARCamera.videoParams.texCoordScale =  screenAspect / imageAspect;
     s_ShaderScale = screenAspect / imageAspect;
     
-    unityARCamera.ambientIntensity = frame.lightEstimate.ambientIntensity;
-    
+    unityARCamera.lightEstimation.ambientIntensity = frame.lightEstimate.ambientIntensity;
+    unityARCamera.lightEstimation.ambientColorTemperature = frame.lightEstimate.ambientColorTemperature;
+
     unityARCamera.videoParams.yWidth = (uint32_t)imageWidth;
     unityARCamera.videoParams.yHeight = (uint32_t)imageHeight;
     unityARCamera.videoParams.cvPixelBufferPtr = (void *) pixelBuffer;
