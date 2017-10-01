@@ -9,6 +9,7 @@ Shader "Unlit/ARCameraShader"
 	}
 	SubShader
 	{
+		Cull Off
 		Tags { "RenderType"="Opaque" }
 		LOD 100
 
