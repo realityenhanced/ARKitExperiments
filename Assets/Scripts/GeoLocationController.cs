@@ -38,7 +38,6 @@ public class GeoLocationController : MonoBehaviour {
     {
         // On ios, the location framework prompts the user for permission.
         Input.location.Start();
-        Input.compass.enabled = true;
 
         // Wait until service initializes.
         int maxWait = 20;
@@ -55,8 +54,9 @@ public class GeoLocationController : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp);
-            Debug.Log("Heading: " + Input.compass.trueHeading);
+            string latLonText = "Lat: " + Input.location.lastData.latitude + "\nLon: " + Input.location.lastData.longitude + "\nAlt: " + Input.location.lastData.altitude;
+            m_objectTransform.gameObject.GetComponent<UpdateText>().SetText(latLonText);
+
         }
 
         Input.location.Stop();
