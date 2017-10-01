@@ -22,7 +22,7 @@ Furniture Experiment video @ https://youtu.be/v8fGn-bCtzw
 
 # Software Versions used
 #### Unity: 2017.1.1f1
-#### XCode: Version 9.0 (9A235)
+#### XCode: Version 9.1 Beta (9B37)
 #### Unity ARKit Plugin: version 1.0.9
 #### OpenCV 3.3.0
 (NOTE: Manually copy OpenCV iOS pack from https://sourceforge.net/projects/opencvlibrary/files/opencv-ios/3.3.0/opencv-3.3.0-ios-framework.zip/download to the following  folders: Assets/Plugins/iOS/OpenCVProcessing & NativePluginCode/opencvprocessing/)
