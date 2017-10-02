@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ManualScannerController : MonoBehaviour {
@@ -12,6 +12,6 @@ public class ManualScannerController : MonoBehaviour {
 
     public void OnSaveMeshClicked()
     {
-        GetComponent<QuadMeshBuilder>().SaveMeshToFile();
+        GetComponent<QuadMeshBuilder>().SaveMeshToFile("RoomMesh");
     }
 }
