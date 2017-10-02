@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.IO;
 
 public class QuadMeshBuilder : MonoBehaviour {
 
@@ -76,7 +75,50 @@ public class QuadMeshBuilder : MonoBehaviour {
 
     public void SaveMeshToFile(string fileName)
     {
+        string path = Application.persistentDataPath + "/" + fileName + ".ply";
+        using (StreamWriter fileWriter = File.CreateText(path))
+        {
+            // Format description @ http://paulbourke.net/dataformats/ply/
 
+            var numQuads = m_quadsHolder.childCount;
+
+            // Ply Header
+            fileWriter.WriteLine("ply");
+            fileWriter.WriteLine("format ascii 1.0");
+            fileWriter.WriteLine("element vertex {0}", numQuads * 4);
+            fileWriter.WriteLine("property float32 x");
+            fileWriter.WriteLine("property float32 y");
+            fileWriter.WriteLine("property float32 z");
+            fileWriter.WriteLine("element face {0}", numQuads);
+            fileWriter.WriteLine("property list uchar int vertex_index");
+            fileWriter.WriteLine("end_header");
+
+            // Write vertices
+            for (int i = 0; i < numQuads; ++i)
+            {
+                var child = m_quadsHolder.GetChild(i);
+                var mesh = child.GetComponent<MeshFilter>().mesh;
+                var vertices = mesh.vertices;
+
+                for (int j = 0; j < vertices.Length; ++j)
+                {
+                    var point = vertices[j];
+                    fileWriter.WriteLine("{0} {1} {2}", point.x, point.y, point.z);
+                }
+            }
+
+            // Write face indices
+            var currentPos = 0;
+            for (int i = 0; i < numQuads; ++i)
+            {
+                var child = m_quadsHolder.GetChild(i);
+                var mesh = child.GetComponent<MeshFilter>().mesh;
+                
+                // Index count = 4 (per QUad), followed by indices of vertices.
+                fileWriter.WriteLine("4 {0} {1} {2} {3} ", currentPos, currentPos + 1, currentPos + 2, currentPos + 3);
+                currentPos += 4;
+            }
+        }
     }
 
     // Helpers
