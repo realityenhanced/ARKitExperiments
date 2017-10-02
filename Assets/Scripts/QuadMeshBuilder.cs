@@ -74,6 +74,11 @@ public class QuadMeshBuilder : MonoBehaviour {
         m_isHidden = true;
     }
 
+    public void SaveMeshToFile(string fileName)
+    {
+
+    }
+
     // Helpers
     void InitializePartialMesh(Vector3 pos)
     {
