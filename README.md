@@ -1,7 +1,4 @@
-<p>
-<h5>Advertisement<h5/>
-<a href=“https://tracking.gitads.io/?repo=ARKitExperiments”><img src="https://images.gitads.io/ARKitExperiments" alt=“GitAds”/></a>
-</p>
+[![https://tracking.gitads.io/?repo=ARKitExperiments](https://images.gitads.io/ARKitExperiments)](https://tracking.gitads.io/?repo=ARKitExperiments)
 
 # ARKitExperiments
 Quick and dirty experiments with ARKit
