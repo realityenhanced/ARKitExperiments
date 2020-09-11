@@ -1,6 +1,3 @@
-#### ARKitExperiments is being sponsored by the following tool; please help to support us by taking a look and signing up to a free trial
-[![https://tracking.gitads.io/?repo=ARKitExperiments](https://images.gitads.io/ARKitExperiments)](https://tracking.gitads.io/?repo=ARKitExperiments)
-
 # ARKitExperiments
 Quick and dirty experiments with ARKit
 
